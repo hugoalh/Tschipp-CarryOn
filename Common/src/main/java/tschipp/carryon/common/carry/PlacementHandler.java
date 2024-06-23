@@ -75,7 +75,7 @@ public class PlacementHandler
 
 		context = new BlockPlaceContext(player, InteractionHand.MAIN_HAND, ItemStack.EMPTY, BlockHitResult.miss(player.position(), facing, pos));
 
-		BlockEntity blockEntity = carry.getBlockEntity(pos);
+		BlockEntity blockEntity = carry.getBlockEntity(pos, level.registryAccess());
 
 		state = getPlacementState(state, player, context, pos);
 
@@ -295,7 +295,7 @@ public class PlacementHandler
 			BlockPlaceContext context = new BlockPlaceContext(player, InteractionHand.MAIN_HAND, ItemStack.EMPTY, BlockHitResult.miss(Vec3.atCenterOf(player.blockPosition()), Direction.DOWN, player.blockPosition()));
 			BlockState state = getPlacementState(carry.getBlock(), player, context, player.blockPosition());
 			BlockPos pos = getDeathPlacementPos(state, player);
-			BlockEntity blockEntity = carry.getBlockEntity(pos);
+			BlockEntity blockEntity = carry.getBlockEntity(pos, player.level().registryAccess());
 			player.level().setBlock(pos, state, 3);
 			if (blockEntity != null)
 				player.level().setBlockEntity(blockEntity);

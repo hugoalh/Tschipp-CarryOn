@@ -49,7 +49,7 @@ public class CommonEvents {
 
         CommonLifecycleEvents.TAGS_LOADED.register((registries, client) -> {
             if(!client)
-                ConfigLoader.onConfigLoaded();
+                ConfigLoader.onConfigLoaded(registries);
         });
 
         UseBlockCallback.EVENT.register((player, world, hand, hitResult) -> {

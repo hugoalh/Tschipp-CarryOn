@@ -93,13 +93,9 @@ public class ClientEvents {
 
 	@OnlyIn(Dist.CLIENT)
 	@SubscribeEvent
-	public static void onClientTick(ClientTickEvent event)
+	public static void onClientTick(ClientTickEvent.Post event)
 	{
-		if(event.phase == Phase.END)
-		{
-			CarryOnCommonClient.checkForKeybinds();
-			CarryOnCommonClient.onCarryClientTick();
-		}
-
+        CarryOnCommonClient.checkForKeybinds();
+        CarryOnCommonClient.onCarryClientTick();
 	}
 }

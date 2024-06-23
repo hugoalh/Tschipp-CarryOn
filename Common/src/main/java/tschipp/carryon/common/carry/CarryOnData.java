@@ -22,6 +22,7 @@ package tschipp.carryon.common.carry;
 
 import com.mojang.serialization.DataResult;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.NbtOps;
@@ -63,7 +64,7 @@ public class CarryOnData {
         if(data.contains("activeScript"))
         {
             DataResult<CarryOnScript> res = CarryOnScript.CODEC.parse(NbtOps.INSTANCE, data.get("activeScript"));
-            this.activeScript = res.getOrThrow(false, (s) -> {throw new RuntimeException("Failed to decode activeScript during CarryOnData serialization: " + s);});
+            this.activeScript = res.getOrThrow((s) -> {throw new RuntimeException("Failed to decode activeScript during CarryOnData serialization: " + s);});
         }
 
         if(data.contains("selected"))
@@ -78,7 +79,7 @@ public class CarryOnData {
         if(activeScript != null)
         {
             DataResult<Tag> res = CarryOnScript.CODEC.encodeStart(NbtOps.INSTANCE, activeScript);
-            Tag tag = res.getOrThrow(false, (s) -> {throw new RuntimeException("Failed to encode activeScript during CarryOnData serialization: " + s);});
+            Tag tag = res.getOrThrow((s) -> {throw new RuntimeException("Failed to encode activeScript during CarryOnData serialization: " + s);});
             nbt.put("activeScript", tag);
         }
         nbt.putInt("selected", this.selectedSlot);
@@ -106,7 +107,7 @@ public class CarryOnData {
 
         if(tile != null)
         {
-            CompoundTag tileData = tile.saveWithId();
+            CompoundTag tileData = tile.saveWithId(tile.getLevel().registryAccess());
             nbt.put("tile", tileData);
         }
     }
@@ -120,7 +121,7 @@ public class CarryOnData {
     }
 
     @Nullable
-    public BlockEntity getBlockEntity(BlockPos pos)
+    public BlockEntity getBlockEntity(BlockPos pos, HolderLookup.Provider lookup)
     {
         if(this.type != CarryType.BLOCK)
             throw new IllegalStateException("Called getBlockEntity on data that contained " + this.type);
@@ -128,7 +129,7 @@ public class CarryOnData {
         if(!nbt.contains("tile"))
             return null;
 
-        return BlockEntity.loadStatic(pos, this.getBlock(), nbt.getCompound("tile"));
+        return BlockEntity.loadStatic(pos, this.getBlock(), nbt.getCompound("tile"), lookup);
     }
 
     public void setEntity(Entity entity)

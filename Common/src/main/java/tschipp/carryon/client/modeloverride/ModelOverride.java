@@ -29,6 +29,7 @@ import net.minecraft.commands.arguments.blocks.BlockStateParser;
 import net.minecraft.commands.arguments.blocks.BlockStateParser.BlockResult;
 import net.minecraft.commands.arguments.item.ItemParser;
 import net.minecraft.commands.arguments.item.ItemParser.ItemResult;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.item.ItemStack;
@@ -41,7 +42,7 @@ import java.util.Map;
 
 public class ModelOverride
 {
-	public static Codec<ModelOverride> CODEC = Codec.STRING.comapFlatMap(ModelOverride::of, override -> override.raw);
+	//public static Codec<ModelOverride> CODEC = Codec.STRING.comapFlatMap(ModelOverride::of, override -> override.raw);
 
 	private String raw;
 	private BlockResult parsedBlock;
@@ -58,8 +59,8 @@ public class ModelOverride
 
 		parsedRHS.ifLeft(res -> {
 			ItemStack stack = new ItemStack(res.item());
-			if(res.nbt() != null)
-				stack.setTag(res.nbt());
+			if(res.components() != null)
+				stack.applyComponents(res.components());
 			this.renderObject = Either.left(stack);
 		});
 
@@ -69,7 +70,7 @@ public class ModelOverride
 		});
 	}
 
-	public static DataResult<ModelOverride> of(String str)
+	public static DataResult<ModelOverride> of(String str, HolderLookup.Provider provider)
 	{
 		if(!str.contains("->"))
 			return DataResult.error(() -> str + " must contain -> Arrow!");
@@ -98,7 +99,7 @@ public class ModelOverride
 		Either<ItemResult, BlockResult> either;
 		try {
 			if(type == Type.ITEM)
-				either = Either.left(ItemParser.parseForItem(BuiltInRegistries.ITEM.asLookup(), new StringReader(to)));
+				either = Either.left(new ItemParser(provider).parse(new StringReader(to)));
 			else
 				either = Either.right(BlockStateParser.parseForBlock(BuiltInRegistries.BLOCK.asLookup(), to, true));
 		}catch (CommandSyntaxException e) {

@@ -81,7 +81,7 @@ public class ScriptReloadListener extends SimpleJsonResourceReloadListener
 		if (player != null)
 		{
 			DataResult<Tag> result = Codec.list(CarryOnScript.CODEC).encodeStart(NbtOps.INSTANCE, ScriptManager.SCRIPTS);
-			Tag tag = result.getOrThrow(false, s -> {throw new RuntimeException("Error while synching Carry On Scripts: " + s);});
+			Tag tag = result.getOrThrow(s -> {throw new RuntimeException("Error while synching Carry On Scripts: " + s);});
 
 			Services.PLATFORM.sendPacketToPlayer(Constants.PACKET_ID_SYNC_SCRIPTS, new ClientboundSyncScriptsPacket(tag), player);
 		}

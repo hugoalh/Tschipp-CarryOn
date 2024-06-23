@@ -22,6 +22,7 @@ package tschipp.carryon.mixin;
 
 
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
@@ -40,9 +41,9 @@ public abstract class PlayerMixin extends LivingEntity {
         super(type, level);
     }
 
-    @Inject(method = "defineSynchedData()V", at = @At("RETURN"))
-    private void onDefineSynchedData(CallbackInfo info) {
-        this.entityData.define(CarryOnDataManager.CARRY_DATA_KEY, new CompoundTag());
+    @Inject(method = "defineSynchedData(Lnet/minecraft/network/syncher/SynchedEntityData$Builder;)V", at = @At("RETURN"))
+    private void onDefineSynchedData(SynchedEntityData.Builder builder, CallbackInfo ci) {
+        builder.define(CarryOnDataManager.CARRY_DATA_KEY, new CompoundTag());
     }
 
     @Inject(method = "addAdditionalSaveData(Lnet/minecraft/nbt/CompoundTag;)V", at = @At("RETURN"))

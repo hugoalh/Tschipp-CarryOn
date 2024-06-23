@@ -70,7 +70,7 @@ public class ModBusEvents {
 					ListHandler.addAllowedStacking(str);
 					break;
 				case "addModelOverride":
-					ModelOverrideHandler.addFromString(str);
+					//ModelOverrideHandler.addFromString(str, event);
 					break;
 			}
 

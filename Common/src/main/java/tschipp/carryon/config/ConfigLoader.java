@@ -22,6 +22,7 @@ package tschipp.carryon.config;
 
 //Many Thanks to ThatGravyBoat for this template!
 
+import net.minecraft.core.HolderLookup;
 import tschipp.carryon.client.modeloverride.ModelOverrideHandler;
 import tschipp.carryon.common.config.ListHandler;
 import tschipp.carryon.common.pickupcondition.PickupConditionHandler;
@@ -53,10 +54,10 @@ public class ConfigLoader {
         Services.PLATFORM.registerConfig(config);
     }
 
-    public static void onConfigLoaded() {
+    public static void onConfigLoaded(HolderLookup.Provider provider) {
         ListHandler.initConfigLists();
         PickupConditionHandler.initPickupConditions();
-        ModelOverrideHandler.initModelOverrides();
+        ModelOverrideHandler.initModelOverrides(provider);
     }
 
     public static BuiltCategory buildCategory(String categoryDesc, Object object) throws IllegalAccessException {

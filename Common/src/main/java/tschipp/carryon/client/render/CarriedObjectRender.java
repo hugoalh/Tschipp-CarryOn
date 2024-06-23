@@ -41,6 +41,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec3;
+import org.joml.Matrix4f;
 import tschipp.carryon.Constants;
 import tschipp.carryon.common.carry.CarryOnData;
 import tschipp.carryon.common.carry.CarryOnData.CarryType;
@@ -175,14 +176,17 @@ public class CarriedObjectRender
 	/**
 	 * Draws the third person view of entities and blocks
 	 * @param partialticks
-	 * @param matrix
+	 * @param mat
 	 */
-	public static void drawThirdPerson(float partialticks, PoseStack matrix) {
+	public static void drawThirdPerson(float partialticks, Matrix4f mat) {
 		Minecraft mc = Minecraft.getInstance();
 		Level level = mc.level;
 		int light = 0;
 		int perspective = CarryRenderHelper.getPerspective();
 		EntityRenderDispatcher manager = mc.getEntityRenderDispatcher();
+
+		PoseStack matrix = new PoseStack();
+		matrix.mulPose(mat);
 
 		RenderSystem.enableBlend();
 		RenderSystem.disableCull();
@@ -222,7 +226,7 @@ public class CarriedObjectRender
 
 					PoseStack.Pose p = matrix.last();
 					PoseStack copy = new PoseStack();
-					copy.mulPoseMatrix(p.pose());
+					copy.mulPose(p.pose());
 					matrix.popPose();
 
 					RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);

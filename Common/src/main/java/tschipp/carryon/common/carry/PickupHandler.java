@@ -93,7 +93,7 @@ public class PickupHandler {
         BlockState state = level.getBlockState(pos);
         CompoundTag nbt = null;
         if(blockEntity != null)
-            nbt = blockEntity.saveWithId();
+            nbt = blockEntity.saveWithId(level.registryAccess());
 
         if(!ListHandler.isPermitted(state.getBlock()))
             return false;
@@ -228,7 +228,7 @@ public class PickupHandler {
             Services.PLATFORM.sendPacketToPlayer(Constants.PACKET_ID_START_RIDING, new ClientboundStartRidingPacket(otherPlayer.getId(), true), player);
             carry.setCarryingPlayer();
             player.swing(InteractionHand.MAIN_HAND, true);
-            player.level().playSound(null, player.getOnPos(), SoundEvents.ARMOR_EQUIP_GENERIC, SoundSource.AMBIENT, 1.0f, 0.5f);
+            player.level().playSound(null, player.getOnPos(), SoundEvents.ARMOR_EQUIP_GENERIC.value(), SoundSource.AMBIENT, 1.0f, 0.5f);
             CarryOnDataManager.setCarryData(player, carry);
             return true;
 
@@ -250,7 +250,7 @@ public class PickupHandler {
         carry.setEntity(entity);
         entity.remove(RemovalReason.UNLOADED_WITH_PLAYER);
 
-        player.level().playSound(null, player.getOnPos(), SoundEvents.ARMOR_EQUIP_GENERIC, SoundSource.AMBIENT, 1.0f, 0.5f);
+        player.level().playSound(null, player.getOnPos(), SoundEvents.ARMOR_EQUIP_GENERIC.value(), SoundSource.AMBIENT, 1.0f, 0.5f);
         CarryOnDataManager.setCarryData(player, carry);
         player.swing(InteractionHand.MAIN_HAND, true);
         return true;

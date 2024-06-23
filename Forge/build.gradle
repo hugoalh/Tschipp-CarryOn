@@ -119,6 +119,9 @@ dependencies {
     	filename = filename.substring(0, lastDash) + ":" + filename.substring(lastDash+1, filename.length());
     	implementation fg.deobf("blank:${filename}")
     }
+
+    // Hack fix for now, force jopt-simple to be exactly 5.0.4 because Mojang ships that version, but some transitive dependencies request 6.0+
+    implementation('net.sf.jopt-simple:jopt-simple:5.0.4') { version { strictly '5.0.4' } }
 }
 
 tasks.withType(JavaCompile).configureEach {

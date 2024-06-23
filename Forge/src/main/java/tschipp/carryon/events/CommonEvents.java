@@ -172,15 +172,14 @@ public class CommonEvents
 	@SubscribeEvent
 	public static void onTagsUpdate(TagsUpdatedEvent event)
 	{
-		ConfigLoader.onConfigLoaded();
+		ConfigLoader.onConfigLoaded(event.getRegistryAccess());
 	}
 
 	@SubscribeEvent
-	public static void onServerTick(ServerTickEvent event)
+	public static void onServerTick(ServerTickEvent.Post event)
 	{
-		if (event.phase == Phase.END)
-			for (ServerPlayer player : event.getServer().getPlayerList().getPlayers())
-				CarryOnCommon.onCarryTick(player);
+		for (ServerPlayer player : event.getServer().getPlayerList().getPlayers())
+			CarryOnCommon.onCarryTick(player);
 	}
 
 	@SubscribeEvent

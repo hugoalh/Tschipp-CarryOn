@@ -22,8 +22,11 @@ package tschipp.carryon.config.neoforge;
 
 import com.electronwill.nightconfig.core.AbstractConfig;
 import com.electronwill.nightconfig.core.UnmodifiableConfig;
+import net.minecraft.client.Minecraft;
+import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.fml.DistExecutor;
 import net.neoforged.fml.ModLoadingContext;
 import net.neoforged.fml.common.Mod;
 import net.neoforged.fml.config.IConfigSpec;
@@ -54,12 +57,24 @@ public class ConfigLoaderImpl {
     @SubscribeEvent
     public static void onConfigLoad(ModConfigEvent.Loading loading) {
         loadConfig(loading.getConfig().getSpec());
-        ConfigLoader.onConfigLoaded();
+        DistExecutor.safeRunWhenOn(Dist.CLIENT, () -> () -> {
+            ConfigLoader.onConfigLoaded(Minecraft.getInstance().level.registryAccess());
+        });
+
+        DistExecutor.safeRunWhenOn(Dist.DEDICATED_SERVER, () -> () -> {
+            ConfigLoader.onConfigLoaded(ServerLifecycleHooks.getCurrentServer().registryAccess());
+        });
     }
     @SubscribeEvent
     public static void onConfigReload(ModConfigEvent.Reloading loading) {
         loadConfig(loading.getConfig().getSpec());
-        ConfigLoader.onConfigLoaded();
+        DistExecutor.safeRunWhenOn(Dist.CLIENT, () -> () -> {
+            ConfigLoader.onConfigLoaded(Minecraft.getInstance().level.registryAccess());
+        });
+
+        DistExecutor.safeRunWhenOn(Dist.DEDICATED_SERVER, () -> () -> {
+            ConfigLoader.onConfigLoaded(ServerLifecycleHooks.getCurrentServer().registryAccess());
+        });
     }
 
     private static void loadConfig(IConfigSpec<ModConfigSpec> spec) {

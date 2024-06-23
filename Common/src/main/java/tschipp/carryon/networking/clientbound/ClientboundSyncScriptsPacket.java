@@ -54,7 +54,7 @@ public record ClientboundSyncScriptsPacket(Tag serialized) implements PacketBase
 	public void handle(Player player)
 	{
 		DataResult<List<CarryOnScript>> res = Codec.list(CarryOnScript.CODEC).parse(NbtOps.INSTANCE, serialized);
-		List<CarryOnScript> scripts = res.getOrThrow(false, (s) -> {throw new RuntimeException("Failed deserializing carry on scripts on the client: " + s);});
+		List<CarryOnScript> scripts = res.getOrThrow((s) -> {throw new RuntimeException("Failed deserializing carry on scripts on the client: " + s);});
 		ScriptManager.SCRIPTS.clear();
 		ScriptManager.SCRIPTS.addAll(scripts);
 	}

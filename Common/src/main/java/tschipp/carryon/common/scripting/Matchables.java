@@ -263,7 +263,7 @@ public final class Matchables
 			for (MobEffectInstance effect : fx)
 			{
 				int amp = effect.getAmplifier();
-				String name = BuiltInRegistries.MOB_EFFECT.getKey(effect.getEffect()).toString();
+				String name = effect.getEffect().getRegisteredName();
 
 				if (names.contains(name))
 				{

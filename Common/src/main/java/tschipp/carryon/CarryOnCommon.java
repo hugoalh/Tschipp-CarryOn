@@ -22,6 +22,11 @@ package tschipp.carryon;
 
 import com.mojang.brigadier.CommandDispatcher;
 import net.minecraft.commands.CommandSourceStack;
+import net.minecraft.core.HolderLookup;
+import net.minecraft.core.RegistryAccess;
+import net.minecraft.core.RegistrySetBuilder;
+import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
@@ -42,6 +47,14 @@ import tschipp.carryon.platform.Services;
 
 public class CarryOnCommon
 {
+	public static final RegistrySetBuilder BUILDER = new RegistrySetBuilder();
+
+	public static HolderLookup.Provider createLookup() {
+		RegistryAccess.Frozen registryaccess$frozen = RegistryAccess.fromRegistryOfRegistries(BuiltInRegistries.REGISTRY);
+		HolderLookup.Provider holderlookup$provider = BUILDER.build(registryaccess$frozen);
+		return holderlookup$provider;
+	}
+
 	public static void registerServerPackets(Object... args)
 	{
 		Services.PLATFORM.registerServerboundPacket(

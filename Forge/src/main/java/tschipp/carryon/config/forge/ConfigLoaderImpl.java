@@ -22,13 +22,21 @@ package tschipp.carryon.config.forge;
 
 import com.electronwill.nightconfig.core.AbstractConfig;
 import com.electronwill.nightconfig.core.UnmodifiableConfig;
+import net.minecraft.client.Minecraft;
+import net.minecraft.server.MinecraftServer;
+import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.common.ForgeConfigSpec;
+import net.minecraftforge.common.util.LogicalSidedProvider;
 import net.minecraftforge.eventbus.api.IEventBus;
+import net.minecraftforge.fml.DistExecutor;
+import net.minecraftforge.fml.LogicalSide;
 import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.config.IConfigSpec;
 import net.minecraftforge.fml.config.ModConfig;
 import net.minecraftforge.fml.event.config.ModConfigEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
+import net.minecraftforge.fml.loading.FMLServiceProvider;
+import net.minecraftforge.server.ServerLifecycleHooks;
 import tschipp.carryon.config.*;
 
 import java.util.*;
@@ -52,12 +60,27 @@ public class ConfigLoaderImpl {
 
     public static void onConfigLoad(ModConfigEvent.Loading loading) {
         loadConfig(loading.getConfig().getSpec());
-        ConfigLoader.onConfigLoaded();
+
+
+        DistExecutor.safeRunWhenOn(Dist.CLIENT, () -> () -> {
+            ConfigLoader.onConfigLoaded(Minecraft.getInstance().level.registryAccess());
+        });
+
+        DistExecutor.safeRunWhenOn(Dist.DEDICATED_SERVER, () -> () -> {
+            ConfigLoader.onConfigLoaded(ServerLifecycleHooks.getCurrentServer().registryAccess());
+        });
     }
 
     public static void onConfigReload(ModConfigEvent.Reloading loading) {
         loadConfig(loading.getConfig().getSpec());
-        ConfigLoader.onConfigLoaded();
+
+        DistExecutor.safeRunWhenOn(Dist.CLIENT, () -> () -> {
+            ConfigLoader.onConfigLoaded(Minecraft.getInstance().level.registryAccess());
+        });
+
+        DistExecutor.safeRunWhenOn(Dist.DEDICATED_SERVER, () -> () -> {
+            ConfigLoader.onConfigLoaded(ServerLifecycleHooks.getCurrentServer().registryAccess());
+        });
     }
 
     private static void loadConfig(IConfigSpec<ForgeConfigSpec> spec) {

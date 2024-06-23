@@ -20,6 +20,7 @@
 
 package tschipp.carryon.platform.services;
 
+import net.minecraft.core.HolderLookup;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
@@ -63,5 +64,4 @@ public interface IPlatformHelper {
     void sendPacketToServer(ResourceLocation id, PacketBase packet);
 
     void sendPacketToPlayer(ResourceLocation id, PacketBase packet, ServerPlayer player);
-
 }
