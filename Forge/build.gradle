@@ -102,10 +102,10 @@ repositories {
 dependencies {
     minecraft "net.minecraftforge:forge:${minecraft_version}-${forge_version}"
     compileOnly project(":Common")
-    implementation(annotationProcessor("io.github.llamalad7:mixinextras-common:${mixinextras_version}"))
-    implementation(jarJar("io.github.llamalad7:mixinextras-forge:${mixinextras_version}")) {
-        jarJar.ranged(it, "[${mixinextras_version},)")
-    }
+    compileOnly(annotationProcessor("io.github.llamalad7:mixinextras-common:${mixinextras_version}"))
+    runtimeOnly(annotationProcessor("io.github.llamalad7:mixinextras-forge:${mixinextras_version}"))
+    jarJar(group: 'io.github.llamalad7', name: 'mixinextras-forge', version: "[${mixinextras_version},)")
+
     //implementation fg.deobf("net.darkhax.gamestages:GameStages-Forge-1.19.2:11.0.2")
     //implementation fg.deobf("net.darkhax.bookshelf:Bookshelf-Forge-1.19.3:17.0.2")
     annotationProcessor 'org.spongepowered:mixin:0.8.5-SNAPSHOT:processor'

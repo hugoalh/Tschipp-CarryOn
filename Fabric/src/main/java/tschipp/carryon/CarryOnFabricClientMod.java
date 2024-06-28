@@ -24,7 +24,11 @@ import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.client.keybinding.v1.KeyBindingHelper;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
+import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
+import net.minecraft.core.RegistryAccess;
 import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.network.RegistryFriendlyByteBuf;
+import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Player;
 import tschipp.carryon.client.keybinds.CarryOnKeybinds;
@@ -44,19 +48,16 @@ public class CarryOnFabricClientMod implements ClientModInitializer
 		CarryOnCommon.registerClientPackets();
 	}
 
-	public static void sendPacketToServer(ResourceLocation id, PacketBase packet)
+	public static void sendPacketToServer(PacketBase packet)
 	{
-		FriendlyByteBuf buf = PacketByteBufs.create();
-		packet.write(buf);
-		ClientPlayNetworking.send(id, buf);
+		ClientPlayNetworking.send(packet);
 	}
 
-	public static <T extends PacketBase> void registerClientboundPacket(ResourceLocation id, Function<FriendlyByteBuf, T> reader, BiConsumer<T, Player> handler)
+	public static <T extends PacketBase> void registerClientboundPacket(CustomPacketPayload.Type<T> id, BiConsumer<T, Player> handler)
 	{
-		ClientPlayNetworking.registerGlobalReceiver(id, (client, packetHandler, buf, responseSender) -> {
-			T packet = reader.apply(buf);
-			client.execute(() -> {
-				handler.accept(packet, client.player);
+		ClientPlayNetworking.registerGlobalReceiver(id, (T packet, ClientPlayNetworking.Context context) -> {
+			context.client().execute(() -> {
+				handler.accept(packet, context.player());
 			});
 		});
 	}

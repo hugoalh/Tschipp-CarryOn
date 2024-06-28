@@ -21,9 +21,16 @@
 package tschipp.carryon.platform;
 
 import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
+import net.fabricmc.fabric.api.networking.v1.PayloadTypeRegistry;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
+import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking.PlayPayloadHandler;
 import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.network.RegistryFriendlyByteBuf;
+import net.minecraft.network.codec.StreamCodec;
+import net.minecraft.network.codec.StreamDecoder;
+import net.minecraft.network.codec.StreamMemberEncoder;
+import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Player;
@@ -61,33 +68,34 @@ public class FabricPlatformHelper implements IPlatformHelper {
     }
 
     @Override
-    public <T extends PacketBase> void registerServerboundPacket(ResourceLocation id, int numericalId, Class<T> clazz, BiConsumer<T, FriendlyByteBuf> writer, Function<FriendlyByteBuf, T> reader, BiConsumer<T, Player> handler, Object... args)
+    public <T extends PacketBase, B extends FriendlyByteBuf> void  registerServerboundPacket(CustomPacketPayload.Type<T> type, Class<T> clazz, StreamCodec<B, T> codec, BiConsumer<T, Player> handler, Object... args)
     {
-        ServerPlayNetworking.registerGlobalReceiver(id, (server, player, packetHandler, buf, responseSender) -> {
-            T packet = reader.apply(buf);
-            server.execute(() -> {
-                handler.accept(packet, player);
+        PayloadTypeRegistry.playC2S().register(type, (StreamCodec<RegistryFriendlyByteBuf, T>)codec);
+
+        ServerPlayNetworking.registerGlobalReceiver(type, (T packet, ServerPlayNetworking.Context context) -> {
+            context.server().execute(() -> {
+                handler.accept(packet, context.player());
             });
         });
     }
 
     @Override
-    public <T extends PacketBase> void registerClientboundPacket(ResourceLocation id, int numericalId, Class<T> clazz, BiConsumer<T, FriendlyByteBuf> writer, Function<FriendlyByteBuf, T> reader, BiConsumer<T, Player> handler, Object... args)
+    public <T extends PacketBase, B extends FriendlyByteBuf> void  registerClientboundPacket(CustomPacketPayload.Type<T> type, Class<T> clazz, StreamCodec<B, T> codec, BiConsumer<T, Player> handler, Object... args)
     {
-        CarryOnFabricClientMod.registerClientboundPacket(id, reader, handler);
+        PayloadTypeRegistry.playS2C().register(type, (StreamCodec<RegistryFriendlyByteBuf, T>)codec);
+
+        CarryOnFabricClientMod.registerClientboundPacket(type, handler);
     }
 
     @Override
     public void sendPacketToServer(ResourceLocation id, PacketBase packet)
     {
-        CarryOnFabricClientMod.sendPacketToServer(id, packet);
+        CarryOnFabricClientMod.sendPacketToServer(packet);
     }
 
     @Override
     public void sendPacketToPlayer(ResourceLocation id, PacketBase packet, ServerPlayer player)
     {
-        FriendlyByteBuf buf = PacketByteBufs.create();
-        packet.write(buf);
-        ServerPlayNetworking.send(player, id, buf);
+        ServerPlayNetworking.send(player, packet);
     }
 }

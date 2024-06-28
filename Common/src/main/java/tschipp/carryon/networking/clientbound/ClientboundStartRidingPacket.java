@@ -21,6 +21,10 @@
 package tschipp.carryon.networking.clientbound;
 
 import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.network.RegistryFriendlyByteBuf;
+import net.minecraft.network.codec.ByteBufCodecs;
+import net.minecraft.network.codec.StreamCodec;
+import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
@@ -29,17 +33,13 @@ import tschipp.carryon.networking.PacketBase;
 
 public record ClientboundStartRidingPacket(int iden, boolean ride) implements PacketBase
 {
-	public ClientboundStartRidingPacket(FriendlyByteBuf buf)
-	{
-		this(buf.readInt(), buf.readBoolean());
-	}
+	public static final StreamCodec<RegistryFriendlyByteBuf, ClientboundStartRidingPacket> CODEC = StreamCodec.composite(
+			ByteBufCodecs.INT, ClientboundStartRidingPacket::iden,
+			ByteBufCodecs.BOOL, ClientboundStartRidingPacket::ride,
+			ClientboundStartRidingPacket::new
+	);
 
-	@Override
-	public void write(FriendlyByteBuf buf)
-	{
-		buf.writeInt(iden);
-		buf.writeBoolean(ride);
-	}
+	public static final CustomPacketPayload.Type<ClientboundStartRidingPacket> TYPE = new Type<>(Constants.PACKET_ID_START_RIDING);
 
 	@Override
 	public void handle(Player player)
@@ -53,7 +53,7 @@ public record ClientboundStartRidingPacket(int iden, boolean ride) implements Pa
 	}
 
 	@Override
-	public ResourceLocation id() {
-		return Constants.PACKET_ID_START_RIDING;
+	public Type<ClientboundStartRidingPacket> type() {
+		return TYPE;
 	}
 }

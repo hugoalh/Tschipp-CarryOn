@@ -26,20 +26,21 @@ import net.minecraft.client.Minecraft;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.bus.api.SubscribeEvent;
-import net.neoforged.fml.DistExecutor;
 import net.neoforged.fml.ModLoadingContext;
+import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.fml.common.Mod;
 import net.neoforged.fml.config.IConfigSpec;
 import net.neoforged.fml.config.ModConfig;
 import net.neoforged.fml.event.config.ModConfigEvent;
 import net.neoforged.neoforge.common.ModConfigSpec;
 import net.neoforged.neoforge.common.NeoForge;
+import net.neoforged.neoforge.server.ServerLifecycleHooks;
 import tschipp.carryon.Constants;
 import tschipp.carryon.config.*;
 
 import java.util.*;
 
-@Mod.EventBusSubscriber(modid = Constants.MOD_ID, bus = Mod.EventBusSubscriber.Bus.MOD)
+@EventBusSubscriber(modid = Constants.MOD_ID, bus = EventBusSubscriber.Bus.MOD)
 public class ConfigLoaderImpl {
 
     public static final Map<ModConfigSpec, BuiltConfig> CONFIGS = new HashMap<>();
@@ -57,24 +58,25 @@ public class ConfigLoaderImpl {
     @SubscribeEvent
     public static void onConfigLoad(ModConfigEvent.Loading loading) {
         loadConfig(loading.getConfig().getSpec());
-        DistExecutor.safeRunWhenOn(Dist.CLIENT, () -> () -> {
-            ConfigLoader.onConfigLoaded(Minecraft.getInstance().level.registryAccess());
-        });
 
-        DistExecutor.safeRunWhenOn(Dist.DEDICATED_SERVER, () -> () -> {
-            ConfigLoader.onConfigLoaded(ServerLifecycleHooks.getCurrentServer().registryAccess());
-        });
+//        DistExecutor.safeRunWhenOn(Dist.CLIENT, () -> () -> {
+//            ConfigLoader.onConfigLoaded(Minecraft.getInstance().level.registryAccess());
+//        });
+//
+//        DistExecutor.safeRunWhenOn(Dist.DEDICATED_SERVER, () -> () -> {
+//            ConfigLoader.onConfigLoaded(ServerLifecycleHooks.getCurrentServer().registryAccess());
+//        });
     }
     @SubscribeEvent
     public static void onConfigReload(ModConfigEvent.Reloading loading) {
-        loadConfig(loading.getConfig().getSpec());
-        DistExecutor.safeRunWhenOn(Dist.CLIENT, () -> () -> {
-            ConfigLoader.onConfigLoaded(Minecraft.getInstance().level.registryAccess());
-        });
-
-        DistExecutor.safeRunWhenOn(Dist.DEDICATED_SERVER, () -> () -> {
-            ConfigLoader.onConfigLoaded(ServerLifecycleHooks.getCurrentServer().registryAccess());
-        });
+          loadConfig(loading.getConfig().getSpec());
+//        DistExecutor.safeRunWhenOn(Dist.CLIENT, () -> () -> {
+//            ConfigLoader.onConfigLoaded(Minecraft.getInstance().level.registryAccess());
+//        });
+//
+//        DistExecutor.safeRunWhenOn(Dist.DEDICATED_SERVER, () -> () -> {
+//            ConfigLoader.onConfigLoaded(ServerLifecycleHooks.getCurrentServer().registryAccess());
+//        });
     }
 
     private static void loadConfig(IConfigSpec<ModConfigSpec> spec) {

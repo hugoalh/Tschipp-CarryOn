@@ -28,21 +28,21 @@ import net.minecraft.world.entity.player.Player;
 
 public class CarryOnDataManager {
 
-    public static final EntityDataAccessor<CompoundTag> CARRY_DATA_KEY = SynchedEntityData.defineId(Player.class, EntityDataSerializers.COMPOUND_TAG);
-
-
     public static CarryOnData getCarryData(Player player)
     {
-        CompoundTag data = player.getEntityData().get(CARRY_DATA_KEY);
-        return new CarryOnData(data.copy());
+        return ((ICarrying)player).getCarryOnData();
     }
 
     public static void setCarryData(Player player, CarryOnData data)
     {
-        data.setSelected(player.getInventory().selected);
-        CompoundTag nbt = data.getNbt();
-        nbt.putInt("tick", player.tickCount);
-        player.getEntityData().set(CARRY_DATA_KEY, nbt);
+        ((ICarrying)player).setCarryOnData(data);
+    }
+
+    public interface ICarrying {
+
+        void setCarryOnData(CarryOnData data);
+
+        CarryOnData getCarryOnData();
     }
 
 }

@@ -21,6 +21,10 @@
 package tschipp.carryon.networking.serverbound;
 
 import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.network.RegistryFriendlyByteBuf;
+import net.minecraft.network.codec.ByteBufCodecs;
+import net.minecraft.network.codec.StreamCodec;
+import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Player;
@@ -28,19 +32,17 @@ import tschipp.carryon.Constants;
 import tschipp.carryon.common.carry.CarryOnData;
 import tschipp.carryon.common.carry.CarryOnDataManager;
 import tschipp.carryon.networking.PacketBase;
+import tschipp.carryon.networking.clientbound.ClientboundStartRidingPacket;
+import tschipp.carryon.networking.clientbound.ClientboundSyncScriptsPacket;
 
 public record ServerboundCarryKeyPressedPacket(boolean pressed) implements PacketBase
 {
-	public ServerboundCarryKeyPressedPacket(FriendlyByteBuf buf)
-	{
-		this(buf.readBoolean());
-	}
+	public static final StreamCodec<RegistryFriendlyByteBuf, ServerboundCarryKeyPressedPacket> CODEC = StreamCodec.composite(
+			ByteBufCodecs.BOOL, ServerboundCarryKeyPressedPacket::pressed,
+			ServerboundCarryKeyPressedPacket::new
+	);
 
-	@Override
-	public void write(FriendlyByteBuf buf)
-	{
-		buf.writeBoolean(pressed);
-	}
+	public static final CustomPacketPayload.Type<ServerboundCarryKeyPressedPacket> TYPE = new Type<>(Constants.PACKET_ID_KEY_PRESSED);
 
 	@Override
 	public void handle(Player player)
@@ -51,7 +53,7 @@ public record ServerboundCarryKeyPressedPacket(boolean pressed) implements Packe
 	}
 
 	@Override
-	public ResourceLocation id() {
-		return Constants.PACKET_ID_KEY_PRESSED;
+	public Type<ServerboundCarryKeyPressedPacket> type() {
+		return TYPE;
 	}
 }

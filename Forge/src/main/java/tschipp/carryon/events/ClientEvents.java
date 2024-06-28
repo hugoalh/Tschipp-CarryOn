@@ -42,10 +42,9 @@ import tschipp.carryon.client.render.CarryRenderHelper;
 import tschipp.carryon.common.carry.CarryOnData;
 import tschipp.carryon.common.carry.CarryOnDataManager;
 
-@Mod.EventBusSubscriber(bus = Mod.EventBusSubscriber.Bus.FORGE, modid = Constants.MOD_ID, value = Dist.CLIENT)
+@Mod.EventBusSubscriber(bus = Mod.EventBusSubscriber.Bus.FORGE, modid = Constants.MOD_ID)
 public class ClientEvents {
 
-	@OnlyIn(Dist.CLIENT)
 	@SubscribeEvent
 	public static void renderHand(RenderHandEvent event)
 	{
@@ -59,7 +58,6 @@ public class ClientEvents {
 			event.setCanceled(true);
 	}
 
-	@OnlyIn(Dist.CLIENT)
 	@SubscribeEvent
 	public static void onRenderLevel(RenderLevelStageEvent event)
 	{
@@ -67,7 +65,6 @@ public class ClientEvents {
 			CarriedObjectRender.drawThirdPerson(event.getPartialTick(), event.getPoseStack());
 	}
 
-	@OnlyIn(Dist.CLIENT)
 	@SubscribeEvent
 	public static void onGuiInit(ScreenEvent.Init.Pre event)
 	{
@@ -91,7 +88,6 @@ public class ClientEvents {
 		}
 	}
 
-	@OnlyIn(Dist.CLIENT)
 	@SubscribeEvent
 	public static void onClientTick(ClientTickEvent.Post event)
 	{

@@ -21,6 +21,9 @@
 package tschipp.carryon.platform;
 
 import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.network.RegistryFriendlyByteBuf;
+import net.minecraft.network.codec.StreamCodec;
+import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Player;
@@ -65,10 +68,10 @@ public class ForgePlatformHelper implements IPlatformHelper {
     }
 
     @Override
-    public <T extends PacketBase> void registerServerboundPacket(ResourceLocation id, int numericalId, Class<T> clazz, BiConsumer<T, FriendlyByteBuf> writer, Function<FriendlyByteBuf, T> reader, BiConsumer<T, Player> handler, Object... args)
+    public <T extends PacketBase, B extends FriendlyByteBuf> void  registerServerboundPacket(CustomPacketPayload.Type<T> type, Class<T> clazz, StreamCodec<B, T> codec, BiConsumer<T, Player> handler, Object... args)
     {
         BiConsumer<T, CustomPayloadEvent.Context> serverHandler = (packet, ctx) -> {
-            if(ctx.getDirection().getReceptionSide().isServer())
+            if(ctx.isServerSide())
             {
                 ctx.setPacketHandled(true);
                 ctx.enqueueWork(() -> {
@@ -77,18 +80,14 @@ public class ForgePlatformHelper implements IPlatformHelper {
             }
         };
 
-        CarryOnForge.network.messageBuilder(clazz, numericalId, NetworkDirection.PLAY_TO_SERVER)
-                .encoder(writer)
-                .decoder(reader)
-                .consumerMainThread(serverHandler)
-                .add();
+        CarryOnForge.network.messageBuilder(clazz).codec((StreamCodec<FriendlyByteBuf, T>) codec).consumerMainThread(serverHandler).add();
     }
 
     @Override
-    public <T extends PacketBase> void registerClientboundPacket(ResourceLocation id, int numericalId, Class<T> clazz, BiConsumer<T, FriendlyByteBuf> writer, Function<FriendlyByteBuf, T> reader, BiConsumer<T, Player> handler, Object... args)
+    public <T extends PacketBase, B extends FriendlyByteBuf> void  registerClientboundPacket(CustomPacketPayload.Type<T> type, Class<T> clazz, StreamCodec<B, T> codec, BiConsumer<T, Player> handler, Object... args)
     {
         BiConsumer<T, CustomPayloadEvent.Context> clientHandler = (packet, ctx) -> {
-            if(ctx.getDirection().getReceptionSide().isClient())
+            if(ctx.isClientSide())
             {
                 ctx.setPacketHandled(true);
                 ctx.enqueueWork(() -> {
@@ -97,11 +96,7 @@ public class ForgePlatformHelper implements IPlatformHelper {
             }
         };
 
-        CarryOnForge.network.messageBuilder(clazz, numericalId, NetworkDirection.PLAY_TO_CLIENT)
-                .encoder(writer)
-                .decoder(reader)
-                .consumerMainThread(clientHandler)
-                .add();
+        CarryOnForge.network.messageBuilder(clazz).codec((StreamCodec<FriendlyByteBuf, T>)codec).consumerMainThread(clientHandler).add();
     }
 
 

@@ -32,9 +32,11 @@ import net.minecraft.world.level.ServerLevelAccessor;
 import net.neoforged.bus.api.Event;
 import net.neoforged.bus.api.EventPriority;
 import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.fml.common.Mod;
 import net.neoforged.neoforge.common.NeoForge;
 import net.neoforged.neoforge.common.util.BlockSnapshot;
+import net.neoforged.neoforge.common.util.TriState;
 import net.neoforged.neoforge.event.*;
 import net.neoforged.neoforge.event.entity.living.LivingAttackEvent;
 import net.neoforged.neoforge.event.entity.living.MobSpawnEvent;
@@ -42,6 +44,7 @@ import net.neoforged.neoforge.event.entity.player.AttackEntityEvent;
 import net.neoforged.neoforge.event.entity.player.PlayerEvent;
 import net.neoforged.neoforge.event.entity.player.PlayerInteractEvent;
 import net.neoforged.neoforge.event.level.BlockEvent;
+import net.neoforged.neoforge.event.tick.ServerTickEvent;
 import tschipp.carryon.CarryOnCommon;
 import tschipp.carryon.Constants;
 import tschipp.carryon.common.carry.CarryOnData;
@@ -52,7 +55,7 @@ import tschipp.carryon.common.carry.PlacementHandler;
 import tschipp.carryon.common.scripting.ScriptReloadListener;
 import tschipp.carryon.config.ConfigLoader;
 
-@Mod.EventBusSubscriber(bus = Mod.EventBusSubscriber.Bus.FORGE, modid = Constants.MOD_ID)
+@EventBusSubscriber(bus = EventBusSubscriber.Bus.GAME, modid = Constants.MOD_ID)
 public class CommonEvents
 {
 	@SubscribeEvent(priority = EventPriority.HIGH)
@@ -90,9 +93,10 @@ public class CommonEvents
 			} else {
 				PlacementHandler.tryPlaceEntity((ServerPlayer) player, pos, event.getFace(), (pPos, toPlace) -> {
 					if (toPlace instanceof Mob mob) {
-						MobSpawnEvent.FinalizeSpawn checkSpawn = new MobSpawnEvent.FinalizeSpawn(mob, (ServerLevelAccessor) level, pPos.x, pPos.y, pPos.z, level.getCurrentDifficultyAt(new BlockPos((int) pPos.x, (int) pPos.y, (int) pPos.z)), MobSpawnType.EVENT, null, null, null);
+						mob.setPos(pPos.x, pPos.y, pPos.z);
+						MobSpawnEvent.PositionCheck checkSpawn = new MobSpawnEvent.PositionCheck(mob, (ServerLevelAccessor) level, MobSpawnType.EVENT, null);
 						NeoForge.EVENT_BUS.post(checkSpawn);
-						return event.getResult() != Event.Result.DENY;
+						return checkSpawn.getResult() != MobSpawnEvent.PositionCheck.Result.FAIL;
 					}
 					return true;
 				});
@@ -101,8 +105,8 @@ public class CommonEvents
 		}
 
 		if (success) {
-			event.setUseBlock(Event.Result.DENY);
-			event.setUseItem(Event.Result.DENY);
+			event.setUseBlock(TriState.FALSE);
+			event.setUseItem(TriState.FALSE);
 			event.setCancellationResult(InteractionResult.SUCCESS);
 			event.setCanceled(true);
 		}
@@ -163,15 +167,14 @@ public class CommonEvents
 	@SubscribeEvent
 	public static void onTagsUpdate(TagsUpdatedEvent event)
 	{
-		ConfigLoader.onConfigLoaded();
+		ConfigLoader.onConfigLoaded(event.getRegistryAccess());
 	}
 
 	@SubscribeEvent
-	public static void onServerTick(TickEvent.ServerTickEvent event)
+	public static void onServerTick(ServerTickEvent.Post event)
 	{
-		if (event.phase == TickEvent.Phase.END)
-			for (ServerPlayer player : event.getServer().getPlayerList().getPlayers())
-				CarryOnCommon.onCarryTick(player);
+		for (ServerPlayer player : event.getServer().getPlayerList().getPlayers())
+			CarryOnCommon.onCarryTick(player);
 	}
 
 	@SubscribeEvent

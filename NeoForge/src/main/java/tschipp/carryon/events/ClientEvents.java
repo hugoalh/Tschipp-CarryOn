@@ -28,11 +28,12 @@ import net.minecraft.world.entity.player.Player;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
 import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.fml.common.Mod;
+import net.neoforged.neoforge.client.event.ClientTickEvent;
 import net.neoforged.neoforge.client.event.RenderHandEvent;
 import net.neoforged.neoforge.client.event.RenderLevelStageEvent;
 import net.neoforged.neoforge.client.event.ScreenEvent;
-import net.neoforged.neoforge.event.TickEvent;
 import tschipp.carryon.CarryOnCommonClient;
 import tschipp.carryon.Constants;
 import tschipp.carryon.client.render.CarriedObjectRender;
@@ -40,7 +41,7 @@ import tschipp.carryon.client.render.CarryRenderHelper;
 import tschipp.carryon.common.carry.CarryOnData;
 import tschipp.carryon.common.carry.CarryOnDataManager;
 
-@Mod.EventBusSubscriber(bus = Mod.EventBusSubscriber.Bus.FORGE, modid = Constants.MOD_ID, value = Dist.CLIENT)
+@EventBusSubscriber(bus = EventBusSubscriber.Bus.GAME, modid = Constants.MOD_ID, value = Dist.CLIENT)
 public class ClientEvents {
 
 	@OnlyIn(Dist.CLIENT)
@@ -62,7 +63,7 @@ public class ClientEvents {
 	public static void onRenderLevel(RenderLevelStageEvent event)
 	{
 		if(event.getStage() == RenderLevelStageEvent.Stage.AFTER_PARTICLES)
-			CarriedObjectRender.drawThirdPerson(event.getPartialTick(), event.getPoseStack());
+			CarriedObjectRender.drawThirdPerson(event.getPartialTick(), event.getPoseStack().last().pose());
 	}
 
 	@OnlyIn(Dist.CLIENT)
@@ -91,13 +92,9 @@ public class ClientEvents {
 
 	@OnlyIn(Dist.CLIENT)
 	@SubscribeEvent
-	public static void onClientTick(TickEvent.ClientTickEvent event)
+	public static void onClientTick(ClientTickEvent.Post event)
 	{
-		if(event.phase == TickEvent.Phase.END)
-		{
-			CarryOnCommonClient.checkForKeybinds();
-			CarryOnCommonClient.onCarryClientTick();
-		}
-
+		CarryOnCommonClient.checkForKeybinds();
+		CarryOnCommonClient.onCarryClientTick();
 	}
 }

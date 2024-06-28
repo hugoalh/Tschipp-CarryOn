@@ -202,6 +202,10 @@ public class CarryOnData {
         this.activeScript = null;
     }
 
+    public CarryOnData clone() {
+        return new CarryOnData(nbt.copy());
+    }
+
     public int getTick()
     {
         if(!this.nbt.contains("tick"))

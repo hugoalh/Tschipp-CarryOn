@@ -26,6 +26,11 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.NbtOps;
 import net.minecraft.nbt.Tag;
 import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.network.RegistryFriendlyByteBuf;
+import net.minecraft.network.codec.ByteBufCodecs;
+import net.minecraft.network.codec.StreamCodec;
+import net.minecraft.network.protocol.Packet;
+import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Player;
 import tschipp.carryon.Constants;
@@ -37,18 +42,12 @@ import java.util.List;
 
 public record ClientboundSyncScriptsPacket(Tag serialized) implements PacketBase
 {
-	public ClientboundSyncScriptsPacket(FriendlyByteBuf buf)
-	{
-		this(buf.readNbt().get("data"));
-	}
+	public static final StreamCodec<RegistryFriendlyByteBuf, ClientboundSyncScriptsPacket> CODEC = StreamCodec.composite(
+			ByteBufCodecs.TAG, ClientboundSyncScriptsPacket::serialized,
+			ClientboundSyncScriptsPacket::new
+	);
 
-	@Override
-	public void write(FriendlyByteBuf buf)
-	{
-		CompoundTag tag = new CompoundTag();
-		tag.put("data", serialized);
-		buf.writeNbt(tag);
-	}
+	public static final CustomPacketPayload.Type<ClientboundSyncScriptsPacket> TYPE = new Type<>(Constants.PACKET_ID_SYNC_SCRIPTS);
 
 	@Override
 	public void handle(Player player)
@@ -60,7 +59,7 @@ public record ClientboundSyncScriptsPacket(Tag serialized) implements PacketBase
 	}
 
 	@Override
-	public ResourceLocation id() {
-		return Constants.PACKET_ID_SYNC_SCRIPTS;
+	public Type<ClientboundSyncScriptsPacket> type() {
+		return TYPE;
 	}
 }

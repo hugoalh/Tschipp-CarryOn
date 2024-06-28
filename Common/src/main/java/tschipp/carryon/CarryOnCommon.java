@@ -58,11 +58,9 @@ public class CarryOnCommon
 	public static void registerServerPackets(Object... args)
 	{
 		Services.PLATFORM.registerServerboundPacket(
-				Constants.PACKET_ID_KEY_PRESSED,
-				0,
+				ServerboundCarryKeyPressedPacket.TYPE,
 				ServerboundCarryKeyPressedPacket.class,
-				ServerboundCarryKeyPressedPacket::write,
-				ServerboundCarryKeyPressedPacket::new,
+				ServerboundCarryKeyPressedPacket.CODEC,
 				ServerboundCarryKeyPressedPacket::handle,
 				args
 		);
@@ -71,21 +69,17 @@ public class CarryOnCommon
 	public static void registerClientPackets(Object... args)
 	{
 		Services.PLATFORM.registerClientboundPacket(
-				Constants.PACKET_ID_START_RIDING,
-				1,
+				ClientboundStartRidingPacket.TYPE,
 				ClientboundStartRidingPacket.class,
-				ClientboundStartRidingPacket::write,
-				ClientboundStartRidingPacket::new,
+				ClientboundStartRidingPacket.CODEC,
 				ClientboundStartRidingPacket::handle,
 				args
 		);
 
 		Services.PLATFORM.registerClientboundPacket(
-				Constants.PACKET_ID_SYNC_SCRIPTS,
-				2,
+				ClientboundSyncScriptsPacket.TYPE,
 				ClientboundSyncScriptsPacket.class,
-				ClientboundSyncScriptsPacket::write,
-				ClientboundSyncScriptsPacket::new,
+				ClientboundSyncScriptsPacket.CODEC,
 				ClientboundSyncScriptsPacket::handle,
 				args
 		);

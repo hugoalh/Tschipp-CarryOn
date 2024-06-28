@@ -25,8 +25,8 @@ import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.Mod;
 import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.neoforged.neoforge.common.NeoForge;
-import net.neoforged.neoforge.network.event.RegisterPayloadHandlerEvent;
-import net.neoforged.neoforge.network.registration.IPayloadRegistrar;
+import net.neoforged.neoforge.network.event.RegisterPayloadHandlersEvent;
+import net.neoforged.neoforge.network.registration.PayloadRegistrar;
 import tschipp.carryon.config.neoforge.ConfigLoaderImpl;
 
 @Mod(Constants.MOD_ID)
@@ -49,10 +49,9 @@ public class CarryOnNeoForge {
     {
     }
 
-    public void registerPackets(final RegisterPayloadHandlerEvent event) {
+    public void registerPackets(final RegisterPayloadHandlersEvent event) {
 
-        final IPayloadRegistrar registrar = event.registrar(Constants.MOD_ID)
-                .versioned("1.0.0");
+        final PayloadRegistrar registrar = event.registrar("1.0.0");
 
         CarryOnCommon.registerServerPackets(registrar);
         CarryOnCommon.registerClientPackets(registrar);

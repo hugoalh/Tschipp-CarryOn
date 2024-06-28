@@ -23,6 +23,7 @@ package tschipp.carryon.events;
 import net.neoforged.bus.api.EventPriority;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.InterModComms;
+import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.fml.common.Mod;
 import net.neoforged.fml.event.lifecycle.InterModProcessEvent;
 import tschipp.carryon.Constants;
@@ -31,7 +32,7 @@ import tschipp.carryon.common.config.ListHandler;
 
 import java.util.stream.Stream;
 
-@Mod.EventBusSubscriber(bus = Mod.EventBusSubscriber.Bus.MOD, modid = Constants.MOD_ID)
+@EventBusSubscriber(bus = EventBusSubscriber.Bus.MOD, modid = Constants.MOD_ID)
 public class ModBusEvents {
 
 	@SubscribeEvent(priority = EventPriority.LOW)
@@ -68,7 +69,7 @@ public class ModBusEvents {
 					ListHandler.addAllowedStacking(str);
 					break;
 				case "addModelOverride":
-					ModelOverrideHandler.addFromString(str);
+					//ModelOverrideHandler.addFromString(str);
 					break;
 			}
 

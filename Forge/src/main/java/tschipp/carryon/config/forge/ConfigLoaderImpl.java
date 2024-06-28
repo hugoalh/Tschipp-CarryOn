@@ -61,26 +61,26 @@ public class ConfigLoaderImpl {
     public static void onConfigLoad(ModConfigEvent.Loading loading) {
         loadConfig(loading.getConfig().getSpec());
 
-
-        DistExecutor.safeRunWhenOn(Dist.CLIENT, () -> () -> {
-            ConfigLoader.onConfigLoaded(Minecraft.getInstance().level.registryAccess());
-        });
-
-        DistExecutor.safeRunWhenOn(Dist.DEDICATED_SERVER, () -> () -> {
-            ConfigLoader.onConfigLoaded(ServerLifecycleHooks.getCurrentServer().registryAccess());
-        });
+//
+//        DistExecutor.safeRunWhenOn(Dist.CLIENT, () -> () -> {
+//            ConfigLoader.onConfigLoaded(Minecraft.getInstance().level.registryAccess());
+//        });
+//
+//        DistExecutor.safeRunWhenOn(Dist.DEDICATED_SERVER, () -> () -> {
+//            ConfigLoader.onConfigLoaded(ServerLifecycleHooks.getCurrentServer().registryAccess());
+//        });
     }
 
     public static void onConfigReload(ModConfigEvent.Reloading loading) {
         loadConfig(loading.getConfig().getSpec());
-
-        DistExecutor.safeRunWhenOn(Dist.CLIENT, () -> () -> {
-            ConfigLoader.onConfigLoaded(Minecraft.getInstance().level.registryAccess());
-        });
-
-        DistExecutor.safeRunWhenOn(Dist.DEDICATED_SERVER, () -> () -> {
-            ConfigLoader.onConfigLoaded(ServerLifecycleHooks.getCurrentServer().registryAccess());
-        });
+//
+//        DistExecutor.safeRunWhenOn(Dist.CLIENT, () -> () -> {
+//            ConfigLoader.onConfigLoaded(Minecraft.getInstance().level.registryAccess());
+//        });
+//
+//        DistExecutor.safeRunWhenOn(Dist.DEDICATED_SERVER, () -> () -> {
+//            ConfigLoader.onConfigLoaded(ServerLifecycleHooks.getCurrentServer().registryAccess());
+//        });
     }
 
     private static void loadConfig(IConfigSpec<ForgeConfigSpec> spec) {

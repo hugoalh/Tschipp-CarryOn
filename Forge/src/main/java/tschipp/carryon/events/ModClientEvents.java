@@ -29,10 +29,9 @@ import net.minecraftforge.fml.common.Mod.EventBusSubscriber.Bus;
 import tschipp.carryon.Constants;
 import tschipp.carryon.client.keybinds.CarryOnKeybinds;
 
-@Mod.EventBusSubscriber(bus = Bus.MOD, modid = Constants.MOD_ID, value = Dist.CLIENT)
+@Mod.EventBusSubscriber(bus = Bus.MOD, modid = Constants.MOD_ID)
 public class ModClientEvents
 {
-	@OnlyIn(Dist.CLIENT)
 	@SubscribeEvent
 	public static void registerKeybinds(RegisterKeyMappingsEvent event)
 	{
