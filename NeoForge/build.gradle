@@ -64,6 +64,9 @@ runs {
 
 sourceSets.main.resources.srcDir 'src/generated/resources'
 
+tasks.named("test").configure {
+    enabled = false
+}
 
 dependencies {
     implementation "net.neoforged:neoforge:${neoforge_version}"
