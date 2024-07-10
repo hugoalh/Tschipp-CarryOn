@@ -242,6 +242,7 @@ public class CarryConfig
 			)
 			public String[] forbiddenTiles = {
 					"#forge:immovable", "#forge:relocation_not_supported", "#neoforge:immovable", "#neoforge:relocation_not_supported", "minecraft:end_portal", "minecraft:piston_head",
+					"#c:relocation_not_supported",
 					"minecraft:end_gateway", "minecraft:tall_grass", "minecraft:large_fern", "minecraft:peony",
 					"minecraft:rose_bush", "minecraft:lilac", "minecraft:sunflower", "minecraft:*_bed",
 					"minecraft:*_door", "minecraft:big_dripleaf_stem", "minecraft:waterlily", "minecraft:cake",
@@ -268,9 +269,9 @@ public class CarryConfig
 					"mekanismgenerators:wind_generator", "cookingforblockheads:cabinet", "cookingforblockheads:corner", "cookingforblockheads:counter",
 					"cookingforblockheads:oven", "cookingforblockheads:toaster", "cookingforblockheads:milk_jar", "cookingforblockheads:cow_jar",
 					"cookingforblockheads:fruit_basket", "cookingforblockheads:cooking_table", "cookingforblockheads:fridge", "cookingforblockheads:sink",
-					"chipped:*",
-					"powah:*", "advancementtrophies:trophy", "mekanismgenerators:heat_generator", "mna:filler_block", "create_enchantment_industry:*", "graveyard:*", "immersivepetroleum:*", "tardis:interior_door",
-					"cuffed:*"
+					"chipped:*", "irons_spellbooks:*", "create*:*", "simple_pipes:*", "libmultipart:*", "quark:tiny_potato", "ait:*",
+					"vampirism:*", "extrastorage:*", "relics:researching_table", "sophisticatedstorage:*chest",
+					"powah:*", "advancementtrophies:trophy", "mekanismgenerators:heat_generator", "mna:filler_block", "create_enchantment_industry:*", "graveyard:*", "immersivepetroleum:*", "tardis:interior_door", "cuffed:*"
 			};
 
 			@Property(
@@ -278,6 +279,7 @@ public class CarryConfig
 					description = "Entities that cannot be picked up"
 			)
 			public String[] forbiddenEntities = {
+					"#c:capturing_not_supported", "#c:teleporting_not_supported",
 					"minecraft:end_crystal", "minecraft:ender_dragon", "minecraft:ghast",
 					"minecraft:shulker", "minecraft:leash_knot", "minecraft:armor_stand",
 					"minecraft:item_frame", "minecraft:painting", "minecraft:shulker_bullet",

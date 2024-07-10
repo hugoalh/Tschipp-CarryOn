@@ -158,8 +158,15 @@ public class PlacementHandler
 		Level level = player.level();
 
 		BlockPlaceContext context = new BlockPlaceContext(player, InteractionHand.MAIN_HAND, ItemStack.EMPTY, BlockHitResult.miss(player.position(), facing, pos));
-		if (!level.getBlockState(pos).canBeReplaced(context))
+		if (!level.getBlockState(pos).canBeReplaced(context)) {
 			pos = pos.relative(facing);
+ 			context = new BlockPlaceContext(player, InteractionHand.MAIN_HAND, ItemStack.EMPTY, BlockHitResult.miss(player.position(), facing, pos));
+		}
+
+		if (!level.getBlockState(pos).canBeReplaced(context)) {
+			level.playSound(null, player.getX(), player.getY(), player.getZ(), SoundEvents.LAVA_POP, SoundSource.PLAYERS, 0.5F, 0.5F);
+			return false;
+		}
 
 		Vec3 placementPos = Vec3.atBottomCenterOf(pos);
 
@@ -228,7 +235,7 @@ public class PlacementHandler
 
 			if (ListHandler.isStackingPermitted(topEntity)) {
 				double sizeEntity = topEntity.getBbHeight() * topEntity.getBbWidth();
-				if (Constants.COMMON_CONFIG.settings.entitySizeMattersStacking && sizeHeldEntity <= sizeEntity || !Constants.COMMON_CONFIG.settings.entitySizeMattersStacking) {
+				if (!Constants.COMMON_CONFIG.settings.entitySizeMattersStacking || sizeHeldEntity <= sizeEntity) {
 					if (topEntity instanceof Horse horse)
 						horse.setTamed(true);
 

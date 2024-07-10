@@ -200,7 +200,7 @@ public class CarriedObjectRender
 
 				CarryOnData carry = CarryOnDataManager.getCarryData(player);
 
-				if (perspective == 0 && player == mc.player && !(Services.PLATFORM.isModLoaded("firstperson") || Services.PLATFORM.isModLoaded("firstpersonmod")))
+				if (perspective == 0 && player == mc.player && !(Services.PLATFORM.isModLoaded("firstperson") || Services.PLATFORM.isModLoaded("firstpersonmod") || Services.PLATFORM.isModLoaded("realcamera")))
 					continue;
 
 				light = manager.getPackedLightCoords(player, partialticks);
