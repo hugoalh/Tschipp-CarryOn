@@ -271,7 +271,7 @@ public class CarryConfig
 					"cookingforblockheads:fruit_basket", "cookingforblockheads:cooking_table", "cookingforblockheads:fridge", "cookingforblockheads:sink",
 					"chipped:*", "irons_spellbooks:*", "create*:*", "simple_pipes:*", "libmultipart:*", "quark:tiny_potato", "ait:*",
 					"vampirism:*", "extrastorage:*", "relics:researching_table", "sophisticatedstorage:*chest",
-					"powah:*", "advancementtrophies:trophy", "mekanismgenerators:heat_generator", "mna:filler_block", "create_enchantment_industry:*", "graveyard:*", "immersivepetroleum:*", "tardis:interior_door"
+					"powah:*", "advancementtrophies:trophy", "mekanismgenerators:heat_generator", "mna:filler_block", "create_enchantment_industry:*", "graveyard:*", "immersivepetroleum:*", "tardis:interior_door", "cuffed:*"
 			};
 
 			@Property(
