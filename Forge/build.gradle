@@ -108,7 +108,6 @@ dependencies {
     jarJar(group: 'io.github.llamalad7', name: 'mixinextras-forge', version: "[${mixinextras_version},)")
 
     //implementation fg.deobf("net.darkhax.gamestages:GameStages-Forge-1.19.2:11.0.2")
-    //implementation fg.deobf("net.darkhax.bookshelf:Bookshelf-Forge-1.19.3:17.0.2")
     annotationProcessor 'org.spongepowered:mixin:0.8.5-SNAPSHOT:processor'
 
     fileTree("libs").matching {
@@ -143,7 +142,7 @@ reobf {
     jarJar {}
 }
 
-jar.finalizedBy('reobfJar')
+//jar.finalizedBy('reobf')
 
 publishing {
     publications {
