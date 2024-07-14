@@ -30,6 +30,6 @@ public class IdentifiableScriptReloadListener extends ScriptReloadListener imple
 	@Override
 	public ResourceLocation getFabricId()
 	{
-		return new ResourceLocation(Constants.MOD_ID, "carryon_scripts");
+		return ResourceLocation.fromNamespaceAndPath(Constants.MOD_ID, "carryon_scripts");
 	}
 }

@@ -62,7 +62,7 @@ public class ClientEvents {
 	public static void onRenderLevel(RenderLevelStageEvent event)
 	{
 		if(event.getStage() == Stage.AFTER_PARTICLES)
-			CarriedObjectRender.drawThirdPerson(event.getPartialTick(), event.getPoseStack());
+			CarriedObjectRender.drawThirdPerson(Minecraft.getInstance().getTimer().getGameTimeDeltaPartialTick(true), event.getPoseStack());
 	}
 
 	@SubscribeEvent

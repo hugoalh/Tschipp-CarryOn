@@ -46,5 +46,5 @@ plugins {
 }
 
 rootProject.name = 'CarryOn'
-include("Common", "Fabric", "NeoForge")
-//include("Common", "Fabric", "Forge", "NeoForge")
+//include("Common", "Fabric", "NeoForge")
+include("Common", "Fabric", "Forge", "NeoForge")

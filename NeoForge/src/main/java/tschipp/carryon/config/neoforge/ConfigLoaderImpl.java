@@ -26,6 +26,7 @@ import net.minecraft.client.Minecraft;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.fml.ModContainer;
 import net.neoforged.fml.ModLoadingContext;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.fml.common.Mod;
@@ -45,13 +46,14 @@ public class ConfigLoaderImpl {
 
     public static final Map<ModConfigSpec, BuiltConfig> CONFIGS = new HashMap<>();
 
-    public static void initialize() {
+    public static void initialize(ModContainer container) {
 
         ConfigLoaderImpl.CONFIGS.forEach((spec, config) -> {
+
             if(config.fileName.contains("client"))
-                ModLoadingContext.get().registerConfig(ModConfig.Type.CLIENT, spec, config.fileName+".toml");
+                container.registerConfig(ModConfig.Type.CLIENT, spec, config.fileName+".toml");
             else
-                ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, spec, config.fileName+".toml");
+                container.registerConfig(ModConfig.Type.COMMON, spec, config.fileName+".toml");
         });
     }
 

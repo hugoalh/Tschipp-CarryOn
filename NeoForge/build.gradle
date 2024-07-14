@@ -1,9 +1,10 @@
 plugins {
     id 'idea'
     id 'maven-publish'
-    id 'net.neoforged.gradle.userdev' version '7.0.142'
+    id 'net.neoforged.gradle.userdev' version '7.0.145'
     id 'java-library'
 }
+
 
 if (System.getenv('BUILD_NUMBER') != null) {
     version += "." + System.getenv('BUILD_NUMBER')
@@ -33,6 +34,8 @@ if (file('src/main/resources/META-INF/accesstransformer.cfg').exists()) {
 runs {
     // applies to all the run configs below
     configureEach {
+        systemProperty 'forge.logging.markers', 'REGISTRIES'
+        systemProperty 'forge.logging.console.level', 'debug'
         modSource project.sourceSets.main
     }
 
@@ -62,7 +65,12 @@ runs {
     }
 }
 
-sourceSets.main.resources.srcDir 'src/generated/resources'
+sourceSets.main.resources { srcDir 'src/generated/resources' }
+
+configurations {
+    runtimeClasspath.extendsFrom localRuntime
+}
+
 
 tasks.named("test").configure {
     enabled = false
@@ -105,5 +113,12 @@ publishing {
         maven {
             url "file://" + System.getenv("local_maven")
         }
+    }
+}
+
+idea {
+    module {
+        downloadSources = true
+        downloadJavadoc = true
     }
 }

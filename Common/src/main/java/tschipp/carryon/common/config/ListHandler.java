@@ -152,7 +152,7 @@ public class ListHandler {
                 continue;
             String name = propString.substring(0, propString.indexOf("["));
             String props = propString.substring(propString.indexOf("[") + 1, propString.indexOf("]"));
-            Block blk = BuiltInRegistries.BLOCK.get(new ResourceLocation(name));
+            Block blk = BuiltInRegistries.BLOCK.get(ResourceLocation.parse(name));
             for(String propName : props.split(",")) {
                 for (Property<?> prop : blk.defaultBlockState().getProperties()) {
                     if (prop.getName().equals(propName))
@@ -164,7 +164,7 @@ public class ListHandler {
 
     private static <T> void addTag(String tag, Map<ResourceLocation, TagKey<T>> tagMap, List<TagKey<T>> tags) {
         String sub = tag.substring(1);
-        TagKey<T> t = tagMap.get(new ResourceLocation(sub));
+        TagKey<T> t = tagMap.get(ResourceLocation.parse(sub));
         if (t != null)
             tags.add(t);
     }

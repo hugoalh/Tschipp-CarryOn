@@ -50,7 +50,7 @@ public class CarryOnForge {
 
     private void setup(final FMLCommonSetupEvent event)
     {
-        network = ChannelBuilder.named(new ResourceLocation(Constants.MOD_ID, "carryonpackets")).simpleChannel();
+        network = ChannelBuilder.named(ResourceLocation.fromNamespaceAndPath(Constants.MOD_ID, "carryonpackets")).simpleChannel();
 
         CarryOnCommon.registerServerPackets();
         CarryOnCommon.registerClientPackets();

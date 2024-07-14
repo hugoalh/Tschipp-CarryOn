@@ -22,6 +22,7 @@ package tschipp.carryon.client.render;
 
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.BufferBuilder;
+import com.mojang.blaze3d.vertex.ByteBufferBuilder;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.Tesselator;
 import com.mojang.math.Axis;
@@ -50,19 +51,21 @@ import tschipp.carryon.common.scripting.CarryOnScript;
 import tschipp.carryon.common.scripting.CarryOnScript.ScriptRender;
 import tschipp.carryon.platform.Services;
 
+import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Optional;
+import java.util.SequencedMap;
 
 public class CarriedObjectRender
 {
 
-	private static Map<RenderType, BufferBuilder> builders = Map.of(
-			RenderType.glint(), new BufferBuilder(RenderType.glint().bufferSize()),
-			RenderType.glintDirect(), new BufferBuilder(RenderType.glintDirect().bufferSize()),
-			RenderType.glintTranslucent(), new BufferBuilder(RenderType.glintTranslucent().bufferSize()),
-			RenderType.entityGlint(), new BufferBuilder(RenderType.entityGlint().bufferSize()),
-			RenderType.entityGlintDirect(), new BufferBuilder(RenderType.entityGlintDirect().bufferSize())
-	);
+	private static SequencedMap<RenderType, ByteBufferBuilder> builders = new LinkedHashMap<>(Map.of(
+			RenderType.glint(), new ByteBufferBuilder(RenderType.glint().bufferSize()),
+			RenderType.armorEntityGlint(), new ByteBufferBuilder(RenderType.armorEntityGlint().bufferSize()),
+			RenderType.glintTranslucent(), new ByteBufferBuilder(RenderType.glintTranslucent().bufferSize()),
+			RenderType.entityGlint(), new ByteBufferBuilder(RenderType.entityGlint().bufferSize()),
+			RenderType.entityGlintDirect(), new ByteBufferBuilder(RenderType.entityGlintDirect().bufferSize())
+	));
 
 	public static boolean drawFirstPerson(Player player, MultiBufferSource buffer, PoseStack matrix, int light, float partialTicks)
 	{
@@ -192,7 +195,7 @@ public class CarriedObjectRender
 		RenderSystem.disableCull();
 		RenderSystem.disableDepthTest();
 
-		BufferSource buffer = MultiBufferSource.immediateWithBuffers(builders, Tesselator.getInstance().getBuilder());
+		BufferSource buffer = MultiBufferSource.immediateWithBuffers(builders, builders.get(RenderType.glint()));
 
 		for (Player player : level.players())
 		{

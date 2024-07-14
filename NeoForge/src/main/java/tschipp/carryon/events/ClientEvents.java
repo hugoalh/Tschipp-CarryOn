@@ -63,7 +63,7 @@ public class ClientEvents {
 	public static void onRenderLevel(RenderLevelStageEvent event)
 	{
 		if(event.getStage() == RenderLevelStageEvent.Stage.AFTER_PARTICLES)
-			CarriedObjectRender.drawThirdPerson(event.getPartialTick(), event.getPoseStack().last().pose());
+			CarriedObjectRender.drawThirdPerson(event.getPartialTick().getGameTimeDeltaPartialTick(true), event.getPoseStack().last().pose());
 	}
 
 	@OnlyIn(Dist.CLIENT)

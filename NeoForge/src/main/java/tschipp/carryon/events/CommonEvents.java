@@ -38,7 +38,6 @@ import net.neoforged.neoforge.common.NeoForge;
 import net.neoforged.neoforge.common.util.BlockSnapshot;
 import net.neoforged.neoforge.common.util.TriState;
 import net.neoforged.neoforge.event.*;
-import net.neoforged.neoforge.event.entity.living.LivingAttackEvent;
 import net.neoforged.neoforge.event.entity.living.MobSpawnEvent;
 import net.neoforged.neoforge.event.entity.player.AttackEntityEvent;
 import net.neoforged.neoforge.event.entity.player.PlayerEvent;
@@ -207,7 +206,7 @@ public class CommonEvents
 	}
 
 	@SubscribeEvent
-	public static void playerAttack(LivingAttackEvent event)
+	public static void playerAttack(AttackEntityEvent event)
 	{
 		if(event.getEntity() instanceof Player player)
 			CarryOnCommon.onPlayerAttacked(player);
