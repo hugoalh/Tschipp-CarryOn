@@ -59,7 +59,7 @@ public class ConfigLoaderImpl {
 
     @SubscribeEvent
     public static void onConfigLoad(ModConfigEvent.Loading loading) {
-        loadConfig(loading.getConfig().getSpec());
+        loadConfig((ModConfigSpec) loading.getConfig().getSpec());
 
 //        DistExecutor.safeRunWhenOn(Dist.CLIENT, () -> () -> {
 //            ConfigLoader.onConfigLoaded(Minecraft.getInstance().level.registryAccess());
@@ -71,7 +71,7 @@ public class ConfigLoaderImpl {
     }
     @SubscribeEvent
     public static void onConfigReload(ModConfigEvent.Reloading loading) {
-          loadConfig(loading.getConfig().getSpec());
+          loadConfig((ModConfigSpec) loading.getConfig().getSpec());
 //        DistExecutor.safeRunWhenOn(Dist.CLIENT, () -> () -> {
 //            ConfigLoader.onConfigLoaded(Minecraft.getInstance().level.registryAccess());
 //        });
@@ -81,10 +81,10 @@ public class ConfigLoaderImpl {
 //        });
     }
 
-    private static void loadConfig(IConfigSpec<ModConfigSpec> spec) {
-        BuiltConfig builtConfig = CONFIGS.get(spec.self());
+    private static void loadConfig(ModConfigSpec spec) {
+        BuiltConfig builtConfig = CONFIGS.get(spec);
         if (builtConfig == null) return;
-        loadConfig(builtConfig, spec.self().getValues());
+        loadConfig(builtConfig, spec.getValues());
     }
 
     private static void loadConfig(BuiltCategory category, UnmodifiableConfig config) {
