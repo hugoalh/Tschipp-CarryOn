@@ -45,7 +45,7 @@ public class CarryOnFabricClientMod implements ClientModInitializer
 	{
 		CarryOnKeybinds.registerKeybinds(KeyBindingHelper::registerKeyBinding);
 		ClientEvents.registerEvents();
-		CarryOnCommon.registerClientPackets();
+		CarryOnCommon.registerClientPackets(true);
 	}
 
 	public static void sendPacketToServer(PacketBase packet)

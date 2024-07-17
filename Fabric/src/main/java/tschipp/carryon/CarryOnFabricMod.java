@@ -45,6 +45,7 @@ public class CarryOnFabricMod implements ModInitializer {
 
         CommonEvents.registerEvents();
         CarryOnCommon.registerServerPackets();
+        CarryOnCommon.registerClientPackets(false);
 
     }
 }
