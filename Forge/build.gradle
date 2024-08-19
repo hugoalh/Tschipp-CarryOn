@@ -138,12 +138,6 @@ processResources {
     from project(":Common").sourceSets.main.resources
 }
 
-reobf {
-    jarJar {}
-}
-
-//jar.finalizedBy('reobf')
-
 publishing {
     publications {
         mavenJava(MavenPublication) {
