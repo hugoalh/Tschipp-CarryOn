@@ -32,6 +32,8 @@ mixin {
     config "${mod_id}.forge.mixins.json"
 }
 
+jarJar.enable()
+
 minecraft {
     mappings channel: 'parchment', version: "${parchment_mappings}"
     copyIdeResources = true
@@ -104,9 +106,8 @@ dependencies {
     minecraft "net.minecraftforge:forge:${minecraft_version}-${forge_version}"
     compileOnly project(":Common")
     compileOnly(annotationProcessor("io.github.llamalad7:mixinextras-common:${mixinextras_version}"))
-    implementation(jarJar("io.github.llamalad7:mixinextras-forge:${mixinextras_version}")) {
-        jarJar.ranged(it, "[${mixinextras_version},)")
-    }
+    implementation(annotationProcessor("io.github.llamalad7:mixinextras-forge:${mixinextras_version}"))
+    jarJar(group: 'io.github.llamalad7', name: 'mixinextras-forge', version: "[${mixinextras_version},)")
 
     //implementation fg.deobf("net.darkhax.gamestages:GameStages-Forge-1.19.2:11.0.2")
     annotationProcessor 'org.spongepowered:mixin:0.8.5-SNAPSHOT:processor'
