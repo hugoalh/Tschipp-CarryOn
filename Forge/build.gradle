@@ -33,6 +33,7 @@ mixin {
 }
 
 jarJar.enable()
+build.dependsOn tasks.jarJar
 
 minecraft {
     mappings channel: 'parchment', version: "${parchment_mappings}"
@@ -105,25 +106,28 @@ repositories {
 dependencies {
     minecraft "net.minecraftforge:forge:${minecraft_version}-${forge_version}"
     compileOnly project(":Common")
-    compileOnly(annotationProcessor("io.github.llamalad7:mixinextras-common:${mixinextras_version}"))
-    implementation(annotationProcessor("io.github.llamalad7:mixinextras-forge:${mixinextras_version}"))
-    jarJar(group: 'io.github.llamalad7', name: 'mixinextras-forge', version: "[${mixinextras_version},)")
-
-    //implementation fg.deobf("net.darkhax.gamestages:GameStages-Forge-1.19.2:11.0.2")
     annotationProcessor 'org.spongepowered:mixin:0.8.5-SNAPSHOT:processor'
+// Hack fix for now, force jopt-simple to be exactly 5.0.4 because Mojang ships that version, but some transitive dependencies request 6.0+
+    implementation('net.sf.jopt-simple:jopt-simple:5.0.4') { version { strictly '5.0.4' } }
 
-    fileTree("libs").matching {
-    	include "*.jar"
-    }.each {
-    	String filename = it.getName();
-    	filename = filename.substring(0, filename.length() - 4);
-    	int lastDash = filename.lastIndexOf("-");
-    	filename = filename.substring(0, lastDash) + ":" + filename.substring(lastDash+1, filename.length());
-    	implementation fg.deobf("blank:${filename}")
+    testCompileOnly(compileOnly(annotationProcessor("io.github.llamalad7:mixinextras-common:${mixinextras_version}")))
+    implementation(jarJar("io.github.llamalad7:mixinextras-forge:${mixinextras_version}")) {
+        jarJar.ranged(it, "[${mixinextras_version},)")
     }
 
-    // Hack fix for now, force jopt-simple to be exactly 5.0.4 because Mojang ships that version, but some transitive dependencies request 6.0+
-    implementation('net.sf.jopt-simple:jopt-simple:5.0.4') { version { strictly '5.0.4' } }
+    //implementation fg.deobf("net.darkhax.gamestages:GameStages-Forge-1.19.2:11.0.2")
+
+    fileTree("libs").matching {
+        include "*.jar"
+    }.each {
+        String filename = it.getName();
+        filename = filename.substring(0, filename.length() - 4);
+        int lastDash = filename.lastIndexOf("-");
+        filename = filename.substring(0, lastDash) + ":" + filename.substring(lastDash+1, filename.length());
+        implementation fg.deobf("blank:${filename}")
+    }
+
+
 }
 
 tasks.withType(JavaCompile).configureEach {
@@ -139,6 +143,7 @@ tasks.named("sourcesJar", Jar) {
 processResources {
     from project(":Common").sourceSets.main.resources
 }
+
 
 publishing {
     publications {
