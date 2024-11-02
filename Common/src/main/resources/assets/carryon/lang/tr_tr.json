@@ -2,7 +2,7 @@
     "__comment__": "Translated by @alpeerkaraca",
     "carryon.category.settings": "Ayarlar",
     "carryon.category.blacklist": "Kara Liste",
-    "carryon.category.modeloverrides": "Modellerin Üzerine Yaz (Gelişmiş)",
+    "carryon.category.modeloverrides": "Üzerine Yazılan Modeller (Gelişmiş)",
     "carryon.category.custompickupconditions": "Özel Yerden Alma Durumları (Gelişmiş)",
     "carryon.category.whitelist": "Beyaz Liste",
 
@@ -12,6 +12,6 @@
     "carryon.category.custompickupconditions.custompickupconditionsblocks": "Özel Blok Alma Durumları",
     "carryon.category.custompickupconditions.custompickupconditionsentities": "Özel Varlık Alma Durumları",
 
-    "key.carry.desc": "Taşı Taşı",
-    "key.carry.category": "Taşımaya Devam Et"
+    "key.carry.desc": "Taşı",
+    "key.carry.category": "Carry On"
 }
