@@ -100,7 +100,7 @@ public class ScriptManager
 
 		boolean matchblock = true;
 		if(scBlock.typeNameBlock().isPresent())
-			matchblock = block == BuiltInRegistries.BLOCK.get(scBlock.typeNameBlock().get());
+			matchblock = block == BuiltInRegistries.BLOCK.get(scBlock.typeNameBlock().get()).get().value();
 		boolean matchnbt = scBlock.typeBlockTag().matches(nbt);
 		boolean matchhardness = scBlock.typeHardness().matches(hardness);
 		boolean matchresistance = scBlock.typeResistance().matches(resistance);

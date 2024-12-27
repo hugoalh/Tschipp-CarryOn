@@ -119,7 +119,7 @@ public class PickupCondition
 	private BlockResult parseState(String state)
 	{
 		try {
-			BlockResult result = BlockStateParser.parseForBlock(BuiltInRegistries.BLOCK.asLookup(), state, false);
+			BlockResult result = BlockStateParser.parseForBlock(BuiltInRegistries.BLOCK, state, false);
 			return result;
 		} catch (CommandSyntaxException e) {
 			e.printStackTrace();

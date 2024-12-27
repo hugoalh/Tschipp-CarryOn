@@ -28,8 +28,6 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.client.event.RenderHandEvent;
-import net.minecraftforge.client.event.RenderLevelStageEvent;
-import net.minecraftforge.client.event.RenderLevelStageEvent.Stage;
 import net.minecraftforge.client.event.ScreenEvent;
 import net.minecraftforge.event.TickEvent.ClientTickEvent;
 import net.minecraftforge.event.TickEvent.Phase;
@@ -58,12 +56,14 @@ public class ClientEvents {
 			event.setCanceled(true);
 	}
 
+	/*
 	@SubscribeEvent
-	public static void onRenderLevel(RenderLevelStageEvent event)
+	public static void onRenderLevel(Render event)
 	{
 		if(event.getStage() == Stage.AFTER_PARTICLES)
 			CarriedObjectRender.drawThirdPerson(Minecraft.getInstance().getTimer().getGameTimeDeltaPartialTick(true), event.getPoseStack());
 	}
+	 */
 
 	@SubscribeEvent
 	public static void onGuiInit(ScreenEvent.Init.Pre event)

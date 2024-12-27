@@ -24,8 +24,8 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntitySpawnReason;
 import net.minecraft.world.entity.Mob;
-import net.minecraft.world.entity.MobSpawnType;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.ServerLevelAccessor;
@@ -99,7 +99,7 @@ public class CommonEvents
 			} else {
 				PlacementHandler.tryPlaceEntity((ServerPlayer) player, pos, event.getFace(), (pPos, toPlace) -> {
 					if (toPlace instanceof Mob mob) {
-						FinalizeSpawn checkSpawn = new FinalizeSpawn(mob, (ServerLevelAccessor) level, pPos.x, pPos.y, pPos.z, level.getCurrentDifficultyAt(new BlockPos((int) pPos.x, (int) pPos.y, (int) pPos.z)), MobSpawnType.EVENT, null, null, null);
+						FinalizeSpawn checkSpawn = new FinalizeSpawn(mob, (ServerLevelAccessor) level, pPos.x, pPos.y, pPos.z, level.getCurrentDifficultyAt(new BlockPos((int) pPos.x, (int) pPos.y, (int) pPos.z)), EntitySpawnReason.EVENT, null, null, null);
 						MinecraftForge.EVENT_BUS.post(checkSpawn);
 						return event.getResult() != Result.DENY;
 					}

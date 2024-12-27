@@ -20,6 +20,7 @@
 
 package tschipp.carryon.mixin;
 
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.player.Player;
@@ -35,13 +36,13 @@ import tschipp.carryon.common.carry.PlacementHandler;
 @Mixin(Player.class)
 public class PlayerMixinFabric
 {
-	@Inject(at = @At("HEAD"), method = "hurt(Lnet/minecraft/world/damagesource/DamageSource;F)Z")
-	private void onHurt(DamageSource damageSource, float f, CallbackInfoReturnable<Boolean> cir) {
+	@Inject(at = @At("HEAD"), method = "hurtServer(Lnet/minecraft/server/level/ServerLevel;Lnet/minecraft/world/damagesource/DamageSource;F)Z")
+	private void onHurt(ServerLevel level, DamageSource damageSource, float amount, CallbackInfoReturnable<Boolean> cir) {
 		if(Constants.COMMON_CONFIG.settings.dropCarriedWhenHit)
 		{
 			Player player = ((Player)(Object)this);
 			CarryOnData carry = CarryOnDataManager.getCarryData(player);
-			if(carry.isCarrying() && !player.level().isClientSide)
+			if(carry.isCarrying())
 				PlacementHandler.placeCarried((ServerPlayer)player);
 		}
 

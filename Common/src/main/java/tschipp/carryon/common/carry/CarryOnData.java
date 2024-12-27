@@ -30,6 +30,7 @@ import net.minecraft.nbt.NbtUtils;
 import net.minecraft.nbt.Tag;
 import net.minecraft.world.entity.AreaEffectCloud;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntitySpawnReason;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
@@ -117,7 +118,7 @@ public class CarryOnData {
         if(this.type != CarryType.BLOCK)
             throw new IllegalStateException("Called getBlock on data that contained " + this.type);
 
-        return NbtUtils.readBlockState(BuiltInRegistries.BLOCK.asLookup(), nbt.getCompound("block"));
+        return NbtUtils.readBlockState(BuiltInRegistries.BLOCK, nbt.getCompound("block"));
     }
 
     @Nullable
@@ -145,7 +146,7 @@ public class CarryOnData {
         if(this.type != CarryType.ENTITY)
             throw new IllegalStateException("Called getEntity on data that contained " + this.type);
 
-        var optionalEntity = EntityType.create(nbt.getCompound("entity"), level);
+        var optionalEntity = EntityType.create(nbt.getCompound("entity"), level, EntitySpawnReason.BUCKET);
         if(optionalEntity.isPresent())
             return optionalEntity.get();
 

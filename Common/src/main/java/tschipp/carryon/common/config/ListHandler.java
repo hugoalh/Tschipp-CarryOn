@@ -119,8 +119,8 @@ public class ListHandler {
         ALLOWED_TILES_TAGS.clear();
         PROPERTY_EXCEPTION_CLASSES.clear();
 
-        Map<ResourceLocation, TagKey<Block>> blocktags = BuiltInRegistries.BLOCK.getTagNames().collect(Collectors.toMap(t -> t.location(), t -> t));
-        Map<ResourceLocation, TagKey<EntityType<?>>> entitytags = BuiltInRegistries.ENTITY_TYPE.getTagNames().collect(Collectors.toMap(t -> t.location(), t -> t));
+        Map<ResourceLocation, TagKey<Block>> blocktags = BuiltInRegistries.BLOCK.listTagIds().collect(Collectors.toMap(t -> t.location(), t -> t));
+        Map<ResourceLocation, TagKey<EntityType<?>>> entitytags = BuiltInRegistries.ENTITY_TYPE.listTagIds().collect(Collectors.toMap(t -> t.location(), t -> t));
 
         List<String> forbidden = new ArrayList<>(List.of(Constants.COMMON_CONFIG.blacklist.forbiddenTiles));
         forbidden.add("#carryon:block_blacklist");
@@ -152,7 +152,7 @@ public class ListHandler {
                 continue;
             String name = propString.substring(0, propString.indexOf("["));
             String props = propString.substring(propString.indexOf("[") + 1, propString.indexOf("]"));
-            Block blk = BuiltInRegistries.BLOCK.get(ResourceLocation.parse(name));
+            Block blk = BuiltInRegistries.BLOCK.get(ResourceLocation.parse(name)).get().value();
             for(String propName : props.split(",")) {
                 for (Property<?> prop : blk.defaultBlockState().getProperties()) {
                     if (prop.getName().equals(propName))

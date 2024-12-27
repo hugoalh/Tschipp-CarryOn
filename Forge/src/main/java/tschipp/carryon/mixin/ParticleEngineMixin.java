@@ -20,26 +20,27 @@
 
 package tschipp.carryon.mixin;
 
-import com.llamalad7.mixinextras.sugar.Local;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.Camera;
-import net.minecraft.client.DeltaTracker;
-import net.minecraft.client.renderer.GameRenderer;
-import net.minecraft.client.renderer.LevelRenderer;
+import net.minecraft.client.particle.ParticleEngine;
 import net.minecraft.client.renderer.LightTexture;
-import org.joml.Matrix4f;
+import net.minecraft.client.renderer.culling.Frustum;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import tschipp.carryon.client.render.CarriedObjectRender;
 
-@Mixin(LevelRenderer.class)
-public class LevelRendererMixin
+@Mixin(ParticleEngine.class)
+public class ParticleEngineMixin
 {
-	@Inject(at = @At(value = "INVOKE", target = "Lnet/minecraft/client/particle/ParticleEngine;render(Lnet/minecraft/client/renderer/LightTexture;Lnet/minecraft/client/Camera;F)V"), method = "renderLevel(Lnet/minecraft/client/DeltaTracker;ZLnet/minecraft/client/Camera;Lnet/minecraft/client/renderer/GameRenderer;Lnet/minecraft/client/renderer/LightTexture;Lorg/joml/Matrix4f;Lorg/joml/Matrix4f;)V")
-	private void onRenderLevel(DeltaTracker deltaTracker, boolean renderBlockOutline, Camera camera, GameRenderer gameRenderer, LightTexture lightTexture, Matrix4f frustumMatrix, Matrix4f projectionMatrix, CallbackInfo ci, @Local PoseStack poseStack)
+	//I am injecting into a lambda, lord help me
+
+	@Inject(method = "Lnet/minecraft/client/particle/ParticleEngine;render(Lnet/minecraft/client/renderer/LightTexture;Lnet/minecraft/client/Camera;FLnet/minecraft/client/renderer/culling/Frustum;)V",
+		   at = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/LightTexture;turnOffLightLayer()V",
+		   shift = At.Shift.AFTER))
+	private void onRenderLevel(LightTexture p_107339_, Camera p_107340_, float partialTick, Frustum frustum, CallbackInfo ci)
 	{
-		CarriedObjectRender.drawThirdPerson(deltaTracker.getGameTimeDeltaPartialTick(true), poseStack.last().pose());
+		CarriedObjectRender.drawThirdPerson(partialTick, new PoseStack().last().pose());
 	}
 }

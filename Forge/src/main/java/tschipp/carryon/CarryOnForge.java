@@ -35,7 +35,7 @@ public class CarryOnForge {
 
     public static SimpleChannel network;
 
-    public CarryOnForge() {
+    public CarryOnForge(FMLJavaModLoadingContext context) {
     
         // This method is invoked by the Forge mod loader when it is ready
         // to load your mod. You can access Forge and Common code in this
@@ -43,7 +43,7 @@ public class CarryOnForge {
         // Use Forge to bootstrap the Common mod.
         CarryOnCommon.registerConfig();
 
-        FMLJavaModLoadingContext.get().getModEventBus().addListener(this::setup);
+        context.getModEventBus().addListener(this::setup);
 
         ConfigLoaderImpl.initialize();
     }

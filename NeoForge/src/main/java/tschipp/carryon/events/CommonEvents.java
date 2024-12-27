@@ -24,8 +24,8 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntitySpawnReason;
 import net.minecraft.world.entity.Mob;
-import net.minecraft.world.entity.MobSpawnType;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.ServerLevelAccessor;
@@ -93,7 +93,7 @@ public class CommonEvents
 				PlacementHandler.tryPlaceEntity((ServerPlayer) player, pos, event.getFace(), (pPos, toPlace) -> {
 					if (toPlace instanceof Mob mob) {
 						mob.setPos(pPos.x, pPos.y, pPos.z);
-						MobSpawnEvent.PositionCheck checkSpawn = new MobSpawnEvent.PositionCheck(mob, (ServerLevelAccessor) level, MobSpawnType.EVENT, null);
+						MobSpawnEvent.PositionCheck checkSpawn = new MobSpawnEvent.PositionCheck(mob, (ServerLevelAccessor) level, EntitySpawnReason.EVENT, null);
 						NeoForge.EVENT_BUS.post(checkSpawn);
 						return checkSpawn.getResult() != MobSpawnEvent.PositionCheck.Result.FAIL;
 					}
@@ -166,7 +166,7 @@ public class CommonEvents
 	@SubscribeEvent
 	public static void onTagsUpdate(TagsUpdatedEvent event)
 	{
-		ConfigLoader.onConfigLoaded(event.getRegistryAccess());
+		ConfigLoader.onConfigLoaded(event.getLookupProvider());
 	}
 
 	@SubscribeEvent

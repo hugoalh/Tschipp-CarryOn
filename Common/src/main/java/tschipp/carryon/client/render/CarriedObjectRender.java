@@ -63,8 +63,8 @@ public class CarriedObjectRender
 			RenderType.glint(), new ByteBufferBuilder(RenderType.glint().bufferSize()),
 			RenderType.armorEntityGlint(), new ByteBufferBuilder(RenderType.armorEntityGlint().bufferSize()),
 			RenderType.glintTranslucent(), new ByteBufferBuilder(RenderType.glintTranslucent().bufferSize()),
-			RenderType.entityGlint(), new ByteBufferBuilder(RenderType.entityGlint().bufferSize()),
-			RenderType.entityGlintDirect(), new ByteBufferBuilder(RenderType.entityGlintDirect().bufferSize())
+			RenderType.entityGlint(), new ByteBufferBuilder(RenderType.entityGlint().bufferSize())
+			//RenderType.entityGlintDirect(), new ByteBufferBuilder(RenderType.entityGlintDirect().bufferSize())
 	));
 
 	public static boolean drawFirstPerson(Player player, MultiBufferSource buffer, PoseStack matrix, int light, float partialTicks)
@@ -163,7 +163,7 @@ public class CarriedObjectRender
 				((LivingEntity) entity).hurtTime = 0;
 
 			try {
-				manager.render(entity, 0, 0, 0, 0f, 0, matrix, buffer, light);
+				manager.render(entity, 0, 0, 0, 0f, matrix, buffer, light);
 			}
 			catch (Exception e)
 			{
@@ -256,7 +256,7 @@ public class CarriedObjectRender
 
 						RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
 
-						manager.render(entity, 0, 0, 0, 0f, 0, matrix, buffer, light);
+						manager.render(entity, 0, 0, 0, 0f, matrix, buffer, light);
 						matrix.popPose();
 						manager.setRenderShadow(true);
 						matrix.popPose();

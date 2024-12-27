@@ -20,8 +20,11 @@
 
 package tschipp.carryon.events;
 
+import com.mojang.blaze3d.vertex.PoseStack;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
+import net.fabricmc.fabric.api.client.rendering.v1.WorldRenderEvents;
 import tschipp.carryon.CarryOnCommonClient;
+import tschipp.carryon.client.render.CarriedObjectRender;
 
 public class ClientEvents {
 
@@ -30,6 +33,10 @@ public class ClientEvents {
 		ClientTickEvents.END_CLIENT_TICK.register(mc -> {
 			CarryOnCommonClient.checkForKeybinds();
 			CarryOnCommonClient.onCarryClientTick();
+		});
+
+		WorldRenderEvents.LAST.register(event -> {
+			CarriedObjectRender.drawThirdPerson(event.tickCounter().getGameTimeDeltaPartialTick(true), new PoseStack().last().pose());
 		});
 	}
 

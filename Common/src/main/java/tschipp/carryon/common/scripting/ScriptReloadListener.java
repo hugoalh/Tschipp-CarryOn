@@ -26,6 +26,7 @@ import com.google.gson.JsonElement;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.DataResult;
 import com.mojang.serialization.JsonOps;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.NbtOps;
 import net.minecraft.nbt.Tag;
 import net.minecraft.resources.ResourceLocation;
@@ -41,40 +42,26 @@ import tschipp.carryon.platform.Services;
 import java.util.Collections;
 import java.util.Map;
 
-public class ScriptReloadListener extends SimpleJsonResourceReloadListener
+public class ScriptReloadListener extends SimpleJsonResourceReloadListener<CarryOnScript>
 {
-	private static final Gson GSON = new GsonBuilder().setPrettyPrinting().disableHtmlEscaping().create();
-
 	public ScriptReloadListener()
 	{
-		super(GSON, "carryon/scripts");
+		super(CarryOnScript.CODEC, "carryon/scripts");
 	}
 
 	@Override
-	protected void apply(Map<ResourceLocation, JsonElement> objects, ResourceManager manager, ProfilerFiller profiler)
+	protected void apply(Map<ResourceLocation, CarryOnScript> scripts, ResourceManager resourceManager, ProfilerFiller profilerFiller)
 	{
 		ScriptManager.SCRIPTS.clear();
 
-		try {
-			objects.forEach((path, jsonElem) -> {
-				DataResult<CarryOnScript> res = CarryOnScript.CODEC.parse(JsonOps.INSTANCE, jsonElem);
-				if(res.result().isPresent())
-				{
-					CarryOnScript script = res.result().get();
-					if (script.isValid())
-						ScriptManager.SCRIPTS.add(script);
-				}
-				else
-					Constants.LOG.warn("Error while parsing script: " + res.error().get().message());
-			});
-		}
-		catch (Exception e)
-		{
-			e.printStackTrace();
-		}
+		scripts.forEach((path, script) -> {
+			if (script.isValid())
+				ScriptManager.SCRIPTS.add(script);
+		});
 
 		Collections.sort(ScriptManager.SCRIPTS, (s1, s2) -> Long.compare(s2.priority(), s1.priority()));
 	}
+
 
 	public static void syncScriptsWithClient(ServerPlayer player)
 	{

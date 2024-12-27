@@ -81,7 +81,7 @@ public class ModelOverride
 		BlockResult res;
 
 		try {
-			res = BlockStateParser.parseForBlock(BuiltInRegistries.BLOCK.asLookup(), from, true);
+			res = BlockStateParser.parseForBlock(BuiltInRegistries.BLOCK, from, true);
 		} catch (Exception e) {
 			return DataResult.error(() -> "Error while parsing " + from + ":" + e.getMessage());
 		}
@@ -101,7 +101,7 @@ public class ModelOverride
 			if(type == Type.ITEM)
 				either = Either.left(new ItemParser(provider).parse(new StringReader(to)));
 			else
-				either = Either.right(BlockStateParser.parseForBlock(BuiltInRegistries.BLOCK.asLookup(), to, true));
+				either = Either.right(BlockStateParser.parseForBlock(BuiltInRegistries.BLOCK, to, true));
 		}catch (CommandSyntaxException e) {
 			String finalTo = to;
 			return DataResult.error(() -> "Error while parsing " + finalTo + ":" + e.getMessage());

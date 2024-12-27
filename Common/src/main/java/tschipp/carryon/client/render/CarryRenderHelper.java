@@ -31,6 +31,7 @@ import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntitySpawnReason;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Pose;
 import net.minecraft.world.entity.player.Player;
@@ -270,7 +271,7 @@ public class CarryRenderHelper
 			ScriptRender render = carry.getActiveScript().get().scriptRender();
 			if(render.renderNameBlock().isPresent())
 			{
-				state = BuiltInRegistries.BLOCK.get(render.renderNameBlock().get()).defaultBlockState();
+				state = BuiltInRegistries.BLOCK.get(render.renderNameBlock().get()).get().value().defaultBlockState();
 			}
 		}
 
@@ -318,7 +319,7 @@ public class CarryRenderHelper
 			CarryOnScript script = carry.getActiveScript().get();
 			ScriptRender render = script.scriptRender();
 			if(render.renderNameEntity().isPresent())
-				entity = BuiltInRegistries.ENTITY_TYPE.get(render.renderNameEntity().get()).create(player.level());
+				entity = BuiltInRegistries.ENTITY_TYPE.get(render.renderNameEntity().get()).get().value().create(player.level(), EntitySpawnReason.BUCKET);
 
 			if(render.renderNBT().isPresent())
 				entity.load(render.renderNBT().get());

@@ -22,8 +22,8 @@ package tschipp.carryon.mixin;
 
 import net.minecraft.client.model.HumanoidModel;
 import net.minecraft.client.model.geom.ModelPart;
-import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.player.Player;
+import net.minecraft.client.renderer.entity.state.HumanoidRenderState;
+import net.minecraft.client.renderer.entity.state.PlayerRenderState;
 import net.minecraft.world.phys.Vec3;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -32,9 +32,8 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import tschipp.carryon.Constants;
-import tschipp.carryon.client.render.CarryRenderHelper;
+import tschipp.carryon.client.render.ICarryOnRenderState;
 import tschipp.carryon.common.carry.CarryOnData;
-import tschipp.carryon.common.carry.CarryOnDataManager;
 import tschipp.carryon.common.scripting.CarryOnScript.ScriptRender;
 
 @Mixin(HumanoidModel.class)
@@ -46,20 +45,20 @@ public class HumanoidModelMixin {
     @Shadow
     public ModelPart leftArm;
 
-    @Inject(at = @At("RETURN"), method = "setupAnim(Lnet/minecraft/world/entity/LivingEntity;FFFFF)V")
-    private void onSetupAnimations(LivingEntity living, float f1, float f2, float f3, float f4, float f5, CallbackInfo ci)
+    @Inject(at = @At("RETURN"), method = "setupAnim(Lnet/minecraft/client/renderer/entity/state/HumanoidRenderState;)V")
+    private void onSetupAnimations(HumanoidRenderState state, CallbackInfo ci)
     {
-        if(living instanceof Player player && Constants.CLIENT_CONFIG.renderArms)
+        if(state instanceof ICarryOnRenderState carryOnRenderState && Constants.CLIENT_CONFIG.renderArms)
         {
-            CarryOnData carry = CarryOnDataManager.getCarryData(player);
-            if(carry.isCarrying() && !player.isVisuallySwimming() && !player.isFallFlying())
+            CarryOnData carry = carryOnRenderState.getCarryOnData();
+            if(carry.isCarrying() && !state.isVisuallySwimming && !state.isFallFlying)
             {
-                boolean sneaking = !player.getAbilities().flying && player.isShiftKeyDown() || player.isCrouching();
+                boolean sneaking = state.isCrouching;
 
                 float x = 1.0f + (sneaking ? 0.2f : 0.0f) + (carry.isCarrying(CarryOnData.CarryType.BLOCK) ? 0.0f : 0.3f);
                 float z = 0.05f;
 
-                float width = CarryRenderHelper.getRenderWidth(player);
+                float width = carryOnRenderState.getRenderWidth();
                 float offset = Math.min((width - 1) / 1.5f, 0.2f);
 
                 if(carry.getActiveScript().isPresent())
