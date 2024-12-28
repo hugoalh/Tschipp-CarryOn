@@ -284,6 +284,7 @@ public class CarryConfig
 					"minecraft:end_crystal", "minecraft:ender_dragon", "minecraft:ghast",
 					"minecraft:shulker", "minecraft:leash_knot", "minecraft:armor_stand",
 					"minecraft:item_frame", "minecraft:painting", "minecraft:shulker_bullet",
+					"minecraft:interaction",
 					"animania:hamster", "animania:ferret*", "animania:hedgehog*", "animania:cart",
 					"animania:wagon", "mynko:*", "pixelmon:*", "mocreatures:*", "quark:totem", "vehicle:*",
 					"securitycraft:*", "taterzens:npc", "easy_npc:*", "bodiesbodies:dead_body", "littletiles:*"
