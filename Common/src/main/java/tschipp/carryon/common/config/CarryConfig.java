@@ -272,7 +272,13 @@ public class CarryConfig
 					"chipped:*", "irons_spellbooks:*", "create*:*", "simple_pipes:*", "libmultipart:*", "quark:tiny_potato", "ait:*",
 					"vampirism:*", "extrastorage:*", "relics:researching_table", "sophisticatedstorage:*chest",
 					"powah:*", "advancementtrophies:trophy", "mekanismgenerators:heat_generator", "mna:filler_block", "create_enchantment_industry:*", "graveyard:*", "immersivepetroleum:*",
-					"tardis:interior_door", "cuffed:*", "littletiles:*"
+					"tardis:interior_door", "cuffed:*", "littletiles:*",
+					"butchersdelight:*", "irons_spellbooks:*", "extended_drawers:*", "functionalstorage:*", "sophisticatedstorage:*", "farmersdelight:*",
+					"modern_industrialization:*_cable",
+					"modern_industrialization:item_pipe",
+					"modern_industrialization:*_item_pipe",
+					"modern_industrialization:fluid_pipe",
+					"modern_industrialization:*_fluid_pipe",
 			};
 
 			@Property(
@@ -281,10 +287,10 @@ public class CarryConfig
 			)
 			public String[] forbiddenEntities = {
 					"#c:capturing_not_supported", "#c:teleporting_not_supported",
-					"minecraft:end_crystal", "minecraft:ender_dragon", "minecraft:ghast",
-					"minecraft:shulker", "minecraft:leash_knot", "minecraft:armor_stand",
-					"minecraft:item_frame", "minecraft:painting", "minecraft:shulker_bullet",
-					"minecraft:interaction",
+					"minecraft:end_crystal", "minecraft:ender_dragon", "minecraft:ghast", "minecraft:fireball", "minecraft:small_fireball", "minecraft:whither_skull",
+					"minecraft:shulker", "minecraft:leash_knot", "minecraft:armor_stand", "minecraft:whither_skull_dangerous", "minecraft:dragon_fireball",
+					"minecraft:item_frame", "minecraft:painting", "minecraft:shulker_bullet", "minecraft:evoker_fangs", "minecraft:glow_item_frame", "minecraft:tnt", "minecraft:trident", "minecraft:arrow", "minecraft:spectral_arrow",
+					"minecraft:interaction", "minecraft:marker", "minecraft:block_display", "minecraft:item_display", "minecraft:text_display",
 					"animania:hamster", "animania:ferret*", "animania:hedgehog*", "animania:cart",
 					"animania:wagon", "mynko:*", "pixelmon:*", "mocreatures:*", "quark:totem", "vehicle:*",
 					"securitycraft:*", "taterzens:npc", "easy_npc:*", "bodiesbodies:dead_body", "littletiles:*"
